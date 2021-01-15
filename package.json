@@ -1,9 +1,12 @@
 {
-  "name": "backend",
+  "name": "priority-task-api",
   "version": "0.0.0",
   "description": "TypeScript + Sequelize + Express API Server",
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "start": "npm run build && cross-env NODE_ENV=production node build/server.js",
     "dev": "cross-env NODE_ENV=development nodemon",
