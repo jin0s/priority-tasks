@@ -1,62 +1,55 @@
 import { Sequelize } from 'sequelize-typescript';
 import User from './users.model';
 
-var sequelize: Sequelize
+let sequelize: Sequelize;
 if (process.env.NODE_ENV === 'production') {
-  sequelize = new Sequelize(process.env.DATABASE_URL,
-    {
-      protocol: 'postgres',
-      logging: true,
-      dialect: 'postgres',
-      dialectOptions: {
-        ssl: {
-          require: true,
-          rejectUnauthorized: false
-        }
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
+    protocol: 'postgres',
+    logging: true,
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
       },
-      timezone: '-05:00',
-      define: {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_general_ci',
-      },
-      pool: {
-        min: 0,
-        max: 30,
-        idle: 10000,
-        acquire: 30000,
-      },
-    }
-  );
+    },
+    timezone: '-05:00',
+    define: {
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_general_ci',
+    },
+    pool: {
+      min: 0,
+      max: 30,
+      idle: 10000,
+      acquire: 30000,
+    },
+  });
 } else {
-  sequelize = new Sequelize(
-    process.env.PG_DATABASE,
-    process.env.PG_USER,
-    process.env.PG_PASSWORD,
-    {
-      host: process.env.PG_HOST,
-      port: parseInt(process.env.PG_PORT),
-      protocol: 'postgres',
-      logging: true,
-      dialect: 'postgres',
-      dialectOptions: {
-        ssl: {
-          require: true,
-          rejectUnauthorized: false
-        }
+  sequelize = new Sequelize(process.env.PG_DATABASE, process.env.PG_USER, process.env.PG_PASSWORD, {
+    host: process.env.PG_HOST,
+    port: parseInt(process.env.PG_PORT),
+    protocol: 'postgres',
+    logging: true,
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
       },
-      timezone: '-05:00',
-      define: {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_general_ci',
-      },
-      pool: {
-        min: 0,
-        max: 30,
-        idle: 10000,
-        acquire: 30000,
-      },
-    }
-  );
+    },
+    timezone: '-05:00',
+    define: {
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_general_ci',
+    },
+    pool: {
+      min: 0,
+      max: 30,
+      idle: 10000,
+      acquire: 30000,
+    },
+  });
 }
 
 sequelize.addModels([User]);

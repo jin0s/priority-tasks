@@ -1,12 +1,12 @@
 import { cleanEnv, port, str } from 'envalid';
 
 function validateEnv() {
-  var envVars = {}
-  if(process.env.NODE_ENV === 'production'){
+  let envVars = {};
+  if (process.env.NODE_ENV === 'production') {
     envVars = {
       NODE_ENV: str(),
       DATABASE_URL: str(),
-    }
+    };
   } else {
     envVars = {
       NODE_ENV: str(),
@@ -16,7 +16,7 @@ function validateEnv() {
       PG_DATABASE: str(),
       JWT_SECRET: str(),
       PORT: port(),
-    }
+    };
   }
   cleanEnv(process.env, envVars);
 }
