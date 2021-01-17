@@ -1,4 +1,5 @@
 import { Sequelize } from 'sequelize-typescript';
+import Task from './tasks.model';
 import User from './users.model';
 
 let sequelize: Sequelize;
@@ -53,6 +54,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 sequelize.addModels([User]);
+sequelize.addModels([Task]);
 
 sequelize.authenticate().catch((err: Error) => {
   console.error('Unable to connect to the database:', err);
