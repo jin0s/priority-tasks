@@ -6,7 +6,7 @@
 // import { CreateUserDto } from '../dtos/users.dto';
 
 // afterAll(async () => {
-//   await new Promise(resolve => setTimeout(() => resolve(), 500));
+//   await new Promise<void>(resolve => setTimeout(() => resolve(), 15000));
 // });
 
 // describe('Testing Users', () => {
