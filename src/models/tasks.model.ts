@@ -1,37 +1,52 @@
 import { AllowNull, Column, DataType, Model, PrimaryKey, Table } from 'sequelize-typescript';
-import { DataTypes } from 'sequelize/types';
+import { DataTypes } from 'sequelize';
 
-@Table({ modelName: 'task', timestamps: true, paranoid: true })
+@Table({ modelName: 'tasks', timestamps: true, paranoid: true })
 export default class Task extends Model<Task> {
   @PrimaryKey
   @Column({
     defaultValue: DataType.UUIDV4,
     type: DataType.UUID,
   })
-  TaskId: string;
+  taskId: string;
 
-  // @ForeignKey
-  // @Column({
-  //   defaultValue: DataType.UUIDV4,
-  //   type: DataType.UUID,
-  // })
-  // UserId: string;
+  @Column({
+    defaultValue: DataType.UUIDV4,
+    type: DataType.UUID,
+    references: {
+      model: 'users', // 'fathers' refers to table name
+      key: 'userId', // 'id' refers to column name in fathers table
+    },
+  })
+  userId: string;
 
   @AllowNull(false)
   @Column(DataType.STRING(40))
-  Title: string;
+  title: string;
 
   @AllowNull(false)
-  @Column(DataType.DECIMAL(1, 2))
-  UserWeight: number;
+  @Column({
+    type: DataType.DECIMAL(4, 2),
+    validate: {
+      min: 0.01,
+      max: 1.0,
+    },
+  })
+  userWeight: number;
 
   @AllowNull(false)
-  @Column(DataType.DECIMAL(1, 2))
-  ComputedWeight: number;
+  @Column({
+    type: DataType.DECIMAL(4, 2),
+    validate: {
+      min: 0.01,
+      max: 1.0,
+    },
+  })
+  computedWeight: number;
 
   @AllowNull(false)
   @Column(DataTypes.BOOLEAN)
-  IsDeferred: boolean;
+  isDeferred: boolean;
 
   @AllowNull(false)
   @Column({
@@ -40,7 +55,7 @@ export default class Task extends Model<Task> {
       min: 1,
     },
   })
-  RepeatFloor: number;
+  repeatFloor: number;
 
   @AllowNull(false)
   @Column({
@@ -49,13 +64,13 @@ export default class Task extends Model<Task> {
       max: 365,
     },
   })
-  RepeatCeiling: number;
+  repeatCeiling: number;
 
   @AllowNull(true)
   @Column(DataTypes.DATE)
-  LastCompletedDt: Date;
+  lastCompletedDt: Date;
 
   @AllowNull(true)
   @Column(DataTypes.DATE)
-  LastDeferredDt: Date;
+  lastDeferredDt: Date;
 }
