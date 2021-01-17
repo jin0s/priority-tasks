@@ -1,0 +1,29 @@
+# users API
+
+###
+# baseURL
+@baseURL = http://localhost:5000
+
+
+###
+# Find Task By Id
+GET {{baseURL}}/tasks/66c318ef-425e-4ce3-85f5-22ec365de550"
+
+
+###
+# Add Task
+POST {{baseURL}}/tasks
+Content-Type: application/json
+
+{
+    "taskId": "66c318ef-425e-4ce3-85f5-22ec365de550",
+	  "userId": "0098e672-73d7-4498-b94f-9eb95d0a668b",
+    "title": "Do something",
+    "userWeight": ".5",
+    "computedWeight": ".5",
+    "isDeferred": false,
+    "repeatFloor": 2,
+    "repeatCeiling": 2,
+    "lastCompletedDt": "2021-01-01T00:00:00.001Z",
+    "lastDeferredDt": "2021-01-01T00:00:00.001Z"
+}
