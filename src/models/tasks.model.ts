@@ -15,7 +15,7 @@ export default class Task extends Model<Task> {
   //   defaultValue: DataType.UUIDV4,
   //   type: DataType.UUID,
   // })
-  // userId: string;
+  // UserId: string;
 
   @AllowNull(false)
   @Column(DataType.STRING(40))
