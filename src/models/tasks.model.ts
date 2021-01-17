@@ -8,7 +8,7 @@ export default class Task extends Model<Task> {
     defaultValue: DataType.UUIDV4,
     type: DataType.UUID,
   })
-  taskId: string;
+  TaskId: string;
 
   // @ForeignKey
   // @Column({
@@ -19,7 +19,7 @@ export default class Task extends Model<Task> {
 
   @AllowNull(false)
   @Column(DataType.STRING(40))
-  title: string;
+  Title: string;
 
   @AllowNull(false)
   @Column(DataType.DECIMAL(1, 2))
