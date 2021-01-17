@@ -1,51 +1,86 @@
-// import request from 'supertest';
-// import App from '../app';
-// import AuthRoute from '../routes/auth.route';
-// import { CreateUserDto } from '../dtos/users.dto';
+import request from 'supertest';
+import App from '../app';
+import AuthRoute from '../routes/auth.route';
+import { CreateUserDto } from '../dtos/users.dto';
+import PgPool from '../services/postgres.service';
+
+async function deleteUserByEmail(userEmail: string) : Promise<void>{
+  try {
+    const queryString = 'DELETE FROM public.users WHERE email = $1';
+    const values = [userEmail];
+    const res = await PgPool.query(queryString, values)
+  } catch (err) {
+      console.error('Error executing query', err.stack);
+  }
+};
 
 // afterAll(async () => {
-//   await new Promise(resolve => setTimeout(() => resolve(), 500));
+//   await new Promise<void>(resolve => setTimeout(() => resolve(), 15000));
 // });
 
-// describe('Testing Auth', () => {
-//   describe('[POST] /signup', () => {
-//     it('response should have the Create userData', () => {
-//       const userData: CreateUserDto = {
-//         email: 'test@email.com',
-//         password: 'q1w2e3r4!',
-//       };
-//       const authRoute = new AuthRoute();
-//       const app = new App([authRoute]);
+describe('Testing Auth', () => {
+  const testEmail = 'test@email.com';
 
-//       return request(app.getServer()).post(`${authRoute.path}/signup`).send(userData);
-//     });
-//   });
+  beforeAll(async () => {
+    await deleteUserByEmail(testEmail);
+  });
 
-//   describe('[POST] /login', () => {
-//     it('response should have the Set-Cookie header with the Authorization token', async () => {
-//       const userData: CreateUserDto = {
-//         email: 'test@email.com',
-//         password: 'q1w2e3r4!',
-//       };
-//       process.env.JWT_SECRET = 'jwt_secret';
-//       const authRoute = new AuthRoute();
-//       const app = new App([authRoute]);
+  afterAll(() => {
+    PgPool.end()
+  });
 
-//       return request(app.getServer())
-//         .post(`${authRoute.path}/login`)
-//         .send(userData)
-//         .expect('Set-Cookie', /^Authorization=.+/);
-//     });
-//   });
+  describe('[POST] /signup', () => {
+    it('response should have the Create userData', () => {
+      const userData: CreateUserDto = {
+        email: 'test@email.com',
+        password: 'q1w2e3r4!',
+      };
+      const authRoute = new AuthRoute();
+      const app = new App([authRoute]);
 
-//   describe('[POST] /logout', () => {
-//     it('logout Set-Cookie Authorization=; Max-age=0', () => {
-//       const authRoute = new AuthRoute();
-//       const app = new App([authRoute]);
+      return request(app.getServer()).post(`${authRoute.path}/signup`).send(userData);
+    });
+  });
 
-//       return request(app.getServer())
-//         .post(`${authRoute.path}/logout`)
-//         .expect('Set-Cookie', /^Authorization=\;/);
-//     });
-//   });
-// });
+  describe('[POST] /login', () => {
+    it('response should have the Set-Cookie header with the Authorization token', async () => {
+      const userData: CreateUserDto = {
+        email: 'test@email.com',
+        password: 'q1w2e3r4!',
+      };
+      process.env.JWT_SECRET = 'jwt_secret';
+      const authRoute = new AuthRoute();
+      const app = new App([authRoute]);
+
+      return request(app.getServer())
+        .post(`${authRoute.path}/login`)
+        .send(userData)
+        .expect('Set-Cookie', /^Authorization=.+/);
+    });
+  });
+
+  describe('[POST] /logout', () => {
+    it('logout Set-Cookie Authorization=; Max-age=0', async () => {
+      const authRoute = new AuthRoute();
+      const app = new App([authRoute]);
+      const userData: CreateUserDto = {
+        email: 'test@email.com',
+        password: 'q1w2e3r4!',
+      };
+      
+      // We have to use request.agent for sequential dependecies
+      // Must login to get a valid JWT since logout is protected by auth,middleware
+      const agent = request.agent(app.getServer())
+
+      const response = await agent
+        .post(`${authRoute.path}/login`)
+        .send(userData)
+          
+      return agent
+        .post(`${authRoute.path}/logout`)
+        .send(userData)
+        .expect('Set-Cookie', /^Authorization=\;/);
+    
+    });
+  });
+});

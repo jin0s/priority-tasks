@@ -1,18 +1,23 @@
 import { Sequelize } from 'sequelize-typescript';
 import User from './users.model';
 
-let sequelize: Sequelize;
-if (process.env.NODE_ENV === 'production') {
-  sequelize = new Sequelize(process.env.DATABASE_URL, {
-    protocol: 'postgres',
-    logging: true,
-    dialect: 'postgres',
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
+var sequelize: Sequelize
+if (process.env.NODE_ENV === 'development') {
+  sequelize = new Sequelize(
+    process.env.PG_DATABASE,
+    process.env.PG_USER,
+    process.env.PG_PASSWORD, {
+      host: process.env.PG_HOST,
+      port: parseInt(process.env.PG_PORT),
+      protocol: 'postgres',
+      logging: console.log,
+      dialect: 'postgres',
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false
+        }
       },
-    },
     timezone: '-05:00',
     define: {
       charset: 'utf8mb4',
@@ -26,17 +31,15 @@ if (process.env.NODE_ENV === 'production') {
     },
   });
 } else {
-  sequelize = new Sequelize(process.env.PG_DATABASE, process.env.PG_USER, process.env.PG_PASSWORD, {
-    host: process.env.PG_HOST,
-    port: parseInt(process.env.PG_PORT),
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
     protocol: 'postgres',
-    logging: true,
+    logging: false,
     dialect: 'postgres',
     dialectOptions: {
       ssl: {
         require: true,
-        rejectUnauthorized: false,
-      },
+        rejectUnauthorized: false
+      }
     },
     timezone: '-05:00',
     define: {
