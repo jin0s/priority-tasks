@@ -42,7 +42,7 @@ export default class Task extends Model<Task> {
   })
   RepeatFloor: number;
 
-  @AllowNull(true)
+  @AllowNull(false)
   @Column({
     type: DataTypes.INTEGER,
     validate: {
