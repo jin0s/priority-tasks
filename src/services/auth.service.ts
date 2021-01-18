@@ -26,6 +26,7 @@ class AuthService {
     if (isEmptyObject(userData)) throw new HttpException(400, "You're not userData");
 
     const findUser: User = await this.users.findOne({ where: { email: userData.email } });
+    console.log(findUser);
     if (!findUser) throw new HttpException(409, `You're email ${userData.email} not found`);
 
     const isPasswordMatching: boolean = await bcrypt.compare(userData.password, findUser.password);
@@ -47,7 +48,7 @@ class AuthService {
   }
 
   public createToken(user: User): TokenData {
-    const dataStoredInToken: DataStoredInToken = { id: user.id };
+    const dataStoredInToken: DataStoredInToken = { uuid: user.userId, email: user.email };
     const secret: string = process.env.JWT_SECRET;
     const expiresIn: number = 60 * 60;
 
