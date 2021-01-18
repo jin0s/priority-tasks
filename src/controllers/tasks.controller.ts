@@ -7,7 +7,7 @@ class TasksController {
   public taskService = new taskService();
 
   public getTaskById = async (req: Request, res: Response, next: NextFunction) => {
-    const taskId = req.params.taskId;
+    const taskId = req.params.id;
 
     try {
       const findOneTaskData: Task = await this.taskService.findTaskById(taskId);
