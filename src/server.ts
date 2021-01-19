@@ -2,9 +2,9 @@ import 'dotenv/config';
 import App from './app';
 import AuthRoute from './routes/auth.route';
 import IndexRoute from './routes/index.route';
+import TasksRoute from './routes/tasks.route';
 import UsersRoute from './routes/users.route';
 import validateEnv from './utils/validateEnv';
-import TasksRoute from './routes/tasks.route';
 
 validateEnv();
 
