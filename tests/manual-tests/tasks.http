@@ -1,0 +1,66 @@
+# users API
+
+###
+# baseURL
+@baseURL = http://localhost:5000
+@cookie = Authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTVlYWE4M2MtZjlmMi00MWUyLTkxMzItODk2NmIxZmVkNTg0IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMTA5OTAyMSwiZXhwIjoxNjExMTAyNjIxfQ.2wrSxxoH_dwgvdNkNLPz2MBLkz-JlMNp9Bt24nGq4XQ; HttpOnly; Max-Age=3600;
+
+###
+# Login
+POST {{baseURL}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "example@gmail.com",
+	"password": "qwer1234"
+}
+
+###
+# Get All User's Task
+GET {{baseURL}}/tasks/
+Cookie: {{cookie}}
+###
+# Find Task By Id
+GET {{baseURL}}/tasks/5e219547-2a40-4d83-b193-05386a673e1f
+Cookie: {{cookie}}
+
+###
+# Add Task
+POST {{baseURL}}/tasks
+Content-Type: application/json
+Cookie: {{cookie}}
+
+{
+    "title": "Update something else",
+    "userWeight": ".5",
+    "computedWeight": ".5",
+    "isDeferred": false,
+    "repeatFloor": 2,
+    "repeatCeiling": 2,
+    "lastCompletedDt": "2021-01-01T00:00:00.001Z",
+    "lastDeferredDt": "2021-01-01T00:00:00.001Z"
+}
+
+
+###
+# Delete Task
+DELETE {{baseURL}}/tasks/7b0d9fba-18f5-44ff-aedd-ec923a53ce12
+Cookie: Authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTVlYWE4M2MtZjlmMi00MWUyLTkxMzItODk2NmIxZmVkNTg0IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMTAyMzgwOCwiZXhwIjoxNjExMDI3NDA4fQ.0vhvrh9PBGFfjblOCf5jg3of3UEAVxSmSj_m99VLcqY; HttpOnly; Max-Age=3600;
+
+
+###
+# Update Task
+PUT {{baseURL}}/tasks/2cac7ec1-48c4-404c-9372-ab92c18e8761
+Content-Type: application/json
+Cookie: Authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTVlYWE4M2MtZjlmMi00MWUyLTkxMzItODk2NmIxZmVkNTg0IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMTAyMzgwOCwiZXhwIjoxNjExMDI3NDA4fQ.0vhvrh9PBGFfjblOCf5jg3of3UEAVxSmSj_m99VLcqY; HttpOnly; Max-Age=3600;
+
+{
+    "title": "This is newly updated, bahzahh",
+    "userWeight": .5,
+    "computedWeight": .5,
+    "isDeferred": false,
+    "repeatFloor": 2,
+    "repeatCeiling": 2,
+    "lastCompletedDt": "2021-01-01T00:00:00.001Z",
+    "lastDeferredDt": "2021-01-01T00:00:00.001Z"
+}

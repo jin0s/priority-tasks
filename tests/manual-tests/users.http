@@ -25,7 +25,7 @@ Content-Type: application/json
 
 ###
 # Edit User By Id
-PUT {{baseURL}}/users/1
+PUT {{baseURL}}/users/e5eaa83c-f9f2-41e2-9132-8966b1fed584
 Content-Type: application/json
 
 {

@@ -1,8 +1,8 @@
 import request from 'supertest';
-import App from '../app';
-import AuthRoute from '../routes/auth.route';
-import { CreateUserDto } from '../dtos/users.dto';
-import PgPool from '../services/postgres.service';
+import App from '../src/app';
+import AuthRoute from '../src/routes/auth.route';
+import { UserDto } from '../src/dtos/users.dto';
+import PgPool from '../src/services/postgres.service';
 
 async function deleteUserByEmail(userEmail: string) : Promise<void>{
   try {
@@ -31,7 +31,7 @@ describe('Testing Auth', () => {
 
   describe('[POST] /signup', () => {
     it('response should have the Create userData', () => {
-      const userData: CreateUserDto = {
+      const userData: UserDto = {
         email: 'test@email.com',
         password: 'q1w2e3r4!',
       };
@@ -44,7 +44,7 @@ describe('Testing Auth', () => {
 
   describe('[POST] /login', () => {
     it('response should have the Set-Cookie header with the Authorization token', async () => {
-      const userData: CreateUserDto = {
+      const userData: UserDto = {
         email: 'test@email.com',
         password: 'q1w2e3r4!',
       };
@@ -63,7 +63,7 @@ describe('Testing Auth', () => {
     it('logout Set-Cookie Authorization=; Max-age=0', async () => {
       const authRoute = new AuthRoute();
       const app = new App([authRoute]);
-      const userData: CreateUserDto = {
+      const userData: UserDto = {
         email: 'test@email.com',
         password: 'q1w2e3r4!',
       };

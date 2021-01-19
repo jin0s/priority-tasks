@@ -63,6 +63,10 @@ class App {
   private connectToDatabase() {
     sequelize.sync({ force: false });
   }
+
+  public closeDatabaseConnection() {
+    sequelize.close();
+  }
 }
 
 export default App;

@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { CreateUserDto } from '../dtos/users.dto';
+import { UserDto } from '../dtos/users.dto';
 import HttpException from '../exceptions/HttpException';
-import { DataStoredInToken, TokenData } from '../interfaces/auth.interface';
+import { DataStoredInToken, TokenData, TokenPayloadData } from '../interfaces/auth.interface';
 import { User } from '../interfaces/users.interface';
 import userModel from '../models/users.model';
 import { isEmptyObject } from '../utils/util';
@@ -10,7 +10,7 @@ import { isEmptyObject } from '../utils/util';
 class AuthService {
   public users = userModel;
 
-  public async signup(userData: CreateUserDto): Promise<User> {
+  public async signup(userData: UserDto): Promise<User> {
     if (isEmptyObject(userData)) throw new HttpException(400, "You're not userData");
 
     const findUser: User = await this.users.findOne({ where: { email: userData.email } });
@@ -22,7 +22,7 @@ class AuthService {
     return createUserData;
   }
 
-  public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: User }> {
+  public async login(userData: UserDto): Promise<{ cookie: string; findUser: User }> {
     if (isEmptyObject(userData)) throw new HttpException(400, "You're not userData");
 
     const findUser: User = await this.users.findOne({ where: { email: userData.email } });
@@ -47,7 +47,7 @@ class AuthService {
   }
 
   public createToken(user: User): TokenData {
-    const dataStoredInToken: DataStoredInToken = { id: user.id };
+    const dataStoredInToken: DataStoredInToken = { uuid: user.userId, email: user.email };
     const secret: string = process.env.JWT_SECRET;
     const expiresIn: number = 60 * 60;
 
@@ -57,6 +57,11 @@ class AuthService {
   public createCookie(tokenData: TokenData): string {
     return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`;
   }
+}
+
+export function decodeToken(jwtToken) : TokenPayloadData {
+  const payload = jwt.decode(jwtToken, { json: true }) as TokenPayloadData;
+  return payload
 }
 
 export default AuthService;

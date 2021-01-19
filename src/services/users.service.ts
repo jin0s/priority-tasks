@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { CreateUserDto } from '../dtos/users.dto';
+import { UserDto } from '../dtos/users.dto';
 import HttpException from '../exceptions/HttpException';
 import { User } from '../interfaces/users.interface';
 import userModel from '../models/users.model';
@@ -20,7 +20,7 @@ class UserService {
     return findUser;
   }
 
-  public async createUser(userData: CreateUserDto): Promise<User> {
+  public async createUser(userData: UserDto): Promise<User> {
     if (isEmptyObject(userData)) throw new HttpException(400, "You're not userData");
 
     const findUser: User = await this.users.findOne({ where: { email: userData.email } });
@@ -32,11 +32,11 @@ class UserService {
     return createUserData;
   }
 
-  public async updateUser(userId: number, userData: User): Promise<User> {
+  public async updateUser(userId: string, userData: User): Promise<User> {
     if (isEmptyObject(userData)) throw new HttpException(400, "You're not userData");
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
-    const updateUser: User = await this.users.update({ ...userData, password: hashedPassword }, { where: { id: userId } });
+    const updateUser: User = await this.users.update({ ...userData, password: hashedPassword }, { where: { userId: userId } });
     if (!updateUser) throw new HttpException(409, "You're not user");
 
     return updateUser;

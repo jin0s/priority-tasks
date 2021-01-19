@@ -12,7 +12,7 @@ async function authMiddleware(req: RequestWithUser, res: Response, next: NextFun
 
     try {
       const verificationResponse = jwt.verify(cookies.Authorization, secret) as DataStoredInToken;
-      const userId = verificationResponse.id;
+      const userId = verificationResponse.uuid;
       const findUser = await userModel.findByPk(userId);
 
       if (findUser) {

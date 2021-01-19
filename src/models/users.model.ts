@@ -1,11 +1,13 @@
-import { AllowNull, AutoIncrement, Column, DataType, Model, PrimaryKey, Table } from 'sequelize-typescript';
+import { AllowNull, Column, DataType, Model, PrimaryKey, Table } from 'sequelize-typescript';
 
-@Table({ modelName: 'user', timestamps: true, paranoid: true })
+@Table({ modelName: 'users', timestamps: true, paranoid: true })
 export default class User extends Model<User> {
   @PrimaryKey
-  @AutoIncrement
-  @Column
-  id: number;
+  @Column({
+    defaultValue: DataType.UUIDV4,
+    type: DataType.UUID,
+  })
+  userId: string;
 
   @AllowNull(false)
   @Column(DataType.STRING(45))
