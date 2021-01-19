@@ -1,5 +1,5 @@
 import { where } from 'sequelize/types';
-import { TaskDto, TasksById } from '../dtos/tasks.dto';
+import { TaskDto } from '../dtos/tasks.dto';
 import HttpException from '../exceptions/HttpException';
 import { Task } from '../interfaces/tasks.interface';
 import tasksModel from '../models/tasks.model';
@@ -15,8 +15,8 @@ class TaskService {
   }
 
   public async findAllTasks(userUUID: string): Promise<Task[]> {
-    const users: Task[] = await this.tasks.findAll({ where: { userId: userUUID } });
-    return users;
+    const tasks: Task[] = await this.tasks.findAll({ where: { userId: userUUID }, raw: true });
+    return tasks;
   }
 
   public async findTaskById(taskId: string): Promise<Task> {

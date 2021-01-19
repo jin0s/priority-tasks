@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { CreateUserDto } from '../dtos/users.dto';
+import { UserDto } from '../dtos/users.dto';
 import HttpException from '../exceptions/HttpException';
 import { User } from '../interfaces/users.interface';
 import userModel from '../models/users.model';
@@ -20,7 +20,7 @@ class UserService {
     return findUser;
   }
 
-  public async createUser(userData: CreateUserDto): Promise<User> {
+  public async createUser(userData: UserDto): Promise<User> {
     if (isEmptyObject(userData)) throw new HttpException(400, "You're not userData");
 
     const findUser: User = await this.users.findOne({ where: { email: userData.email } });

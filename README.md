@@ -5,6 +5,9 @@
 # Install dependencies for server
 npm install
 
+# Run tests
+npm run test
+
 # Run the server in development
 npm run dev
 
@@ -16,4 +19,7 @@ If the app is unable to connect to Heroku Postgres Database, you will need to up
 
 https://data.heroku.com/datastores/0f17e1a4-605d-425b-87a5-75b26f76b988#administration
 
-If a `.env` file does not exist, create a new on from the .env-template file
+If a .env file does not exist, create a new on from the .env-template file
+
+## Manual Testing with VSCode REST Client
+Test individual end points with the Visual Studio Code REST Client add-on using .http files found in ./src/tests/manual-tests. 

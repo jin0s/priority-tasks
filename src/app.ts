@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
@@ -11,12 +12,12 @@ import sequelize from './models/index.model';
 class App {
   public app: express.Application;
   public port: string | number;
-  public env: boolean;
+  public envIsDevelopment: boolean;
 
   constructor(routes: Routes[]) {
     this.app = express();
     this.port = process.env.PORT || 5000;
-    this.env = process.env.NODE_ENV === 'production' ? true : false;
+    this.envIsDevelopment = process.env.NODE_ENV === 'development' ? true : false;
 
     this.connectToDatabase();
     this.initializeMiddlewares();
@@ -26,7 +27,7 @@ class App {
 
   public listen() {
     this.app.listen(this.port, () => {
-      console.log(`🚀 App listening on the port ${this.port}`);
+      console.log(`🚀 App listening at\nhttp://localhost:${this.port}`);
     });
   }
 
@@ -35,14 +36,14 @@ class App {
   }
 
   private initializeMiddlewares() {
-    if (this.env) {
+    if (this.envIsDevelopment) {
+      this.app.use(logger('dev'));
+      this.app.use(cors({ origin: true, credentials: true }));
+    } else {
       this.app.use(hpp());
       this.app.use(helmet());
       this.app.use(logger('combined'));
       this.app.use(cors({ origin: 'your.domain.com', credentials: true }));
-    } else {
-      this.app.use(logger('dev'));
-      this.app.use(cors({ origin: true, credentials: true }));
     }
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
@@ -61,6 +62,10 @@ class App {
 
   private connectToDatabase() {
     sequelize.sync({ force: false });
+  }
+
+  public closeDatabaseConnection() {
+    sequelize.close();
   }
 }
 

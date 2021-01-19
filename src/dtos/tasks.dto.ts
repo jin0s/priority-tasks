@@ -11,12 +11,12 @@ export class TaskDto {
   @IsDecimal()
   // @Min(0.01)
   // @Max(1.0)
-  public userWeight: number;
+  public userWeight: string;
 
   @IsDecimal()
   // @Min(0.01)
   // @Max(1.0)
-  public computedWeight: number;
+  public computedWeight: string;
 
   @IsBoolean()
   public isDeferred: boolean;
@@ -34,9 +34,4 @@ export class TaskDto {
 
   @IsDateString()
   lastDeferredDt: Date;
-}
-
-export class TasksById {
-  @IsUUID()
-  public taskId: string;
 }
