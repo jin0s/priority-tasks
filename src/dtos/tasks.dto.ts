@@ -2,12 +2,6 @@ import { IsBoolean, IsDate, IsDateString, IsDecimal, IsNumber, IsString, IsUUID,
 import { Max, Min } from 'sequelize-typescript';
 
 export class TaskDto {
-  @IsUUID()
-  public taskId: string;
-
-  @IsUUID()
-  public userId: string;
-
   @MaxLength(50, {
     message: 'Title is too long',
   })
@@ -40,4 +34,9 @@ export class TaskDto {
 
   @IsDateString()
   lastDeferredDt: Date;
+}
+
+export class TasksById {
+  @IsUUID()
+  public taskId: string;
 }

@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { CreateUserDto } from '../dtos/users.dto';
 import HttpException from '../exceptions/HttpException';
-import { DataStoredInToken, TokenData } from '../interfaces/auth.interface';
+import { DataStoredInToken, TokenData, TokenPayloadData } from '../interfaces/auth.interface';
 import { User } from '../interfaces/users.interface';
 import userModel from '../models/users.model';
 import { isEmptyObject } from '../utils/util';
@@ -58,6 +58,11 @@ class AuthService {
   public createCookie(tokenData: TokenData): string {
     return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`;
   }
+}
+
+export function decodeToken(jwtToken) : TokenPayloadData {
+  const payload = jwt.decode(jwtToken, { json: true }) as TokenPayloadData;
+  return payload
 }
 
 export default AuthService;

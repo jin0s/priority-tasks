@@ -11,7 +11,6 @@ export default class Task extends Model<Task> {
   taskId: string;
 
   @Column({
-    defaultValue: DataType.UUIDV4,
     type: DataType.UUID,
     references: {
       model: 'users', // 'users' refers to table name
