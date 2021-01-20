@@ -22,7 +22,7 @@ class AuthService {
     return createUserData;
   }
 
-  public async login(userData: UserDto): Promise<{ cookie: string; findUser: User }> {
+  public async login(userData: UserDto): Promise<{ cookies: string[]; findUser: User }> {
     if (isEmptyObject(userData)) throw new HttpException(400, "You're not userData");
 
     const findUser: User = await this.users.findOne({ where: { email: userData.email } });
@@ -31,10 +31,13 @@ class AuthService {
     const isPasswordMatching: boolean = await bcrypt.compare(userData.password, findUser.password);
     if (!isPasswordMatching) throw new HttpException(409, "You're password not matching");
 
+    const cookies: string[] = [];
     const tokenData = this.createToken(findUser);
-    const cookie = this.createCookie(tokenData);
+    cookies.push(this.createCookie(tokenData));
+    const refreshToken = this.createRefreshToken(findUser);
+    cookies.push(this.createRefreshCookie(refreshToken));
 
-    return { cookie, findUser };
+    return { cookies, findUser };
   }
 
   public async logout(userData: User): Promise<User> {
@@ -49,13 +52,41 @@ class AuthService {
   public createToken(user: User): TokenData {
     const dataStoredInToken: DataStoredInToken = { uuid: user.userId, email: user.email };
     const secret: string = process.env.JWT_SECRET;
-    const expiresIn: number = 60 * 60;
+    const expiresIn: number = 60 * 60 // 1 hour
 
     return { expiresIn, token: jwt.sign(dataStoredInToken, secret, { expiresIn }) };
   }
 
   public createCookie(tokenData: TokenData): string {
     return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`;
+  }
+
+  public createRefreshToken(user: User): TokenData {
+    const dataStoredInToken: DataStoredInToken = { uuid: user.userId, email: user.email };
+    const secret: string = process.env.REFRESH_JWT_SECRET;
+    const expiresIn: number = 7 * 24 * 60 * 60 // 7 days
+
+    return { expiresIn, token: jwt.sign(dataStoredInToken, secret, { expiresIn }) };
+  }
+
+  public createRefreshCookie(tokenData: TokenData): string {
+    return `Refresh=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`;
+  }
+
+  public refresh(refreshToken: string): {cookies: string[], userData : User} {
+    const refreshTokenData : TokenPayloadData = decodeToken(refreshToken);
+    const cookies: string[] = [];
+    const userData : User = {
+      email: refreshTokenData.email,
+      userId: refreshTokenData.uuid,
+      password: 'password not important here'
+    }
+    const jwtToken = this.createToken(userData);
+    cookies.push(this.createCookie(jwtToken));
+    const newRefreshToken = this.createRefreshToken(userData)
+    cookies.push(this.createRefreshCookie(newRefreshToken));
+
+    return {cookies, userData};
   }
 }
 

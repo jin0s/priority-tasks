@@ -38,12 +38,12 @@ describe('Testing Auth', () => {
       const authRoute = new AuthRoute();
       const app = new App([authRoute]);
 
-      return request(app.getServer()).post(`${authRoute.path}/signup`).send(userData);
+      return request(app.getServer()).post(`${authRoute.path}/signup`).send(userData).expect(201);
     });
   });
 
   describe('[POST] /login', () => {
-    it('response should have the Set-Cookie header with the Authorization token', async () => {
+    it('response should have the Set-Cookie header with the Authorization token and Refresh Token', async () => {
       const userData: UserDto = {
         email: 'test@email.com',
         password: 'q1w2e3r4!',
@@ -55,7 +55,8 @@ describe('Testing Auth', () => {
       return request(app.getServer())
         .post(`${authRoute.path}/login`)
         .send(userData)
-        .expect('Set-Cookie', /^Authorization=.+/);
+        .expect('Set-Cookie', /^Authorization=.+/)
+        .expect('Set-Cookie', /.*Refresh=.+/);
     });
   });
 
@@ -81,6 +82,31 @@ describe('Testing Auth', () => {
         .send(userData)
         .expect('Set-Cookie', /^Authorization=\;/);
     
+    });
+  });
+
+  describe('[POST] /refresh', () => {
+    it('response should have the Set-Cookie header with the Authorization token and Refresh Token', async () => {
+      const authRoute = new AuthRoute();
+      const app = new App([authRoute]);
+      const userData: UserDto = {
+        email: 'test@email.com',
+        password: 'q1w2e3r4!',
+      };
+      
+      // We have to use request.agent for sequential dependecies
+      // Must login to get a valid JWT since logout is protected by auth,middleware
+      const agent = request.agent(app.getServer())
+
+      const response = await agent
+        .post(`${authRoute.path}/login`)
+        .send(userData)
+          
+      return agent
+        .post(`${authRoute.path}/refresh`)
+        .send(userData)
+        .expect('Set-Cookie', /^Authorization=.+/)
+        .expect('Set-Cookie', /.*Refresh=.+/);
     });
   });
 });

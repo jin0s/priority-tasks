@@ -22,8 +22,8 @@ class AuthController {
     const userData: UserDto = req.body;
 
     try {
-      const { cookie, findUser } = await this.authService.login(userData);
-      res.setHeader('Set-Cookie', [cookie]);
+      const { cookies, findUser } = await this.authService.login(userData);
+      res.setHeader('Set-Cookie', cookies);
       res.status(200).json({ data: findUser, message: 'login' });
     } catch (error) {
       next(error);
@@ -37,6 +37,18 @@ class AuthController {
       const logOutUserData: User = await this.authService.logout(userData);
       res.setHeader('Set-Cookie', ['Authorization=; Max-age=0']);
       res.status(200).json({ data: logOutUserData, message: 'logout' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public refresh = async (req: Request, res: Response, next: NextFunction) => {
+    const refreshToken = req.cookies.Refresh;
+
+    try {
+      const { cookies, userData } = this.authService.refresh(refreshToken);
+      res.setHeader('Set-Cookie', cookies);
+      res.status(200).json({ data: userData, message: 'refresh' });
     } catch (error) {
       next(error);
     }

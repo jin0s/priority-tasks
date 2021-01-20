@@ -24,6 +24,16 @@ Content-Type: application/json
 	"password": "qwer1234"
 }
 
+
+###
+# Refresh
+POST {{baseURL}}/refresh
+Content-Type: application/json
+
+{
+    "email": "example@gmail.com"
+}
+
 ###
 # Logout
 POST {{baseURL}}/logout
@@ -32,3 +42,4 @@ Content-Type: application/json
 {
     "email": "example@gmail.com"
 }
+
