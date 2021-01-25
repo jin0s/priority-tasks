@@ -11,11 +11,14 @@ class TasksController {
   public taskService = new taskService();
 
   public getTasks = async (req: Request, res: Response, next: NextFunction) => {
+    if (req.params) {
+      console.log('req.next is: ' + req.query.next);
+    }
     const jwtToken = req.cookies.Authorization;
-    const tokenData : TokenPayloadData = decodeToken(jwtToken);
+    const tokenData: TokenPayloadData = decodeToken(jwtToken);
     const userUUID = tokenData.uuid;
     try {
-      const findAllTasksData: Task[] = await this.taskService.findAllTasks(userUUID);
+      const findAllTasksData: Task[] = await this.taskService.findNextTasks(userUUID);
       res.status(200).json({ data: findAllTasksData, message: 'findAll' });
     } catch (error) {
       next(error);
@@ -25,7 +28,7 @@ class TasksController {
   public getTaskById = async (req: Request, res: Response, next: NextFunction) => {
     const taskId = req.params.id;
     const jwtToken = req.cookies.Authorization;
-    const tokenData : TokenPayloadData = decodeToken(jwtToken);
+    const tokenData: TokenPayloadData = decodeToken(jwtToken);
     const userUUID = tokenData.uuid;
 
     try {
@@ -39,9 +42,8 @@ class TasksController {
   public createTask = async (req: Request, res: Response, next: NextFunction) => {
     const taskData: TaskDto = req.body;
     const jwtToken = req.cookies.Authorization;
-    const tokenData : TokenPayloadData = decodeToken(jwtToken);
+    const tokenData: TokenPayloadData = decodeToken(jwtToken);
     const userId = tokenData.uuid;
-
 
     try {
       const createTaskData: Task = await this.taskService.createTask(userId, taskData);
@@ -55,7 +57,7 @@ class TasksController {
     const taskId = req.params.id;
     const taskData: Task = req.body;
     const jwtToken = req.cookies.Authorization;
-    const tokenData : TokenPayloadData = decodeToken(jwtToken);
+    const tokenData: TokenPayloadData = decodeToken(jwtToken);
     const userUUID = tokenData.uuid;
     try {
       const updatedTaskData: Task = await this.taskService.updateTask(userUUID, taskId, taskData);
@@ -65,11 +67,10 @@ class TasksController {
     }
   };
 
-
   public deleteTaskById = async (req: Request, res: Response, next: NextFunction) => {
     const taskId = req.params.id;
     const jwtToken = req.cookies.Authorization;
-    const tokenData : TokenPayloadData = decodeToken(jwtToken);
+    const tokenData: TokenPayloadData = decodeToken(jwtToken);
     const userUUID = tokenData.uuid;
 
     try {
@@ -79,7 +80,6 @@ class TasksController {
       next(error);
     }
   };
-
 }
 
 export default TasksController;
