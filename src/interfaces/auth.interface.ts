@@ -3,7 +3,7 @@ import { User } from './users.interface';
 
 export interface DataStoredInToken {
   uuid: string;
-  email: string; 
+  email: string;
 }
 
 export interface TokenData {
@@ -11,7 +11,7 @@ export interface TokenData {
   expiresIn: number;
 }
 
-export interface TokenPayloadData{
+export interface TokenPayloadData {
   uuid: string;
   email: string;
   iat: number;
