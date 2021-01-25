@@ -59,9 +59,9 @@ class AuthService {
   }
 }
 
-export function decodeToken(jwtToken) : TokenPayloadData {
+export function decodeToken(jwtToken): TokenPayloadData {
   const payload = jwt.decode(jwtToken, { json: true }) as TokenPayloadData;
-  return payload
+  return payload;
 }
 
 export default AuthService;
