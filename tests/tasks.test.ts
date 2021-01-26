@@ -6,6 +6,17 @@ import TaskRoute from '../src/routes/tasks.route';
 import { TaskDto } from '../src/dtos/tasks.dto';
 import AuthRoute from '../src/routes/auth.route';
 import { UserDto } from '../src/dtos/users.dto';
+import PgPool from '../src/services/postgres.service';
+
+async function cleanUpTasks (userId: string) : Promise<void>{
+  try {
+    const queryString = 'DELETE FROM public.tasks WHERE userId = $1 and createdAt IS LIKE $2';
+    const values = [userId];
+    const res = await PgPool.query(queryString, values)
+  } catch (err) {
+      console.error('Error executing query', err.stack);
+  }
+};
 
 afterAll(async () => {
   await new Promise<void>(resolve => setTimeout(() => resolve(), 500));
@@ -69,7 +80,8 @@ describe('Testing Users', () => {
         lastDeferredDt: new Date("2021-01-01T00:00:00.001Z")
       }
 
-      return agent.post(`${taskRoute.path}`).send(taskData).expect(201);
+      const testResult = agent.post(`${taskRoute.path}`).send(taskData).expect(201);
+      return testResult
     });
   });
 
