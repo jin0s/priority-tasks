@@ -9,7 +9,7 @@ if(process.env.NODE_ENV === 'development') {
     password: process.env.PG_PASSWORD,
     database: process.env.PG_DATABASE,
     ssl: {rejectUnauthorized: false},
-    max: 20,
+    max: 5,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
   });
@@ -17,7 +17,7 @@ if(process.env.NODE_ENV === 'development') {
 } else {
   PgPool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    max: 20,
+    max: 5,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
     ssl: {rejectUnauthorized: false}

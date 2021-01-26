@@ -3,8 +3,9 @@
 ###
 # baseURL
 @baseURL = http://localhost:5000
-@cookie = Authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTVlYWE4M2MtZjlmMi00MWUyLTkxMzItODk2NmIxZmVkNTg0IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMTA5OTAyMSwiZXhwIjoxNjExMTAyNjIxfQ.2wrSxxoH_dwgvdNkNLPz2MBLkz-JlMNp9Bt24nGq4XQ; HttpOnly; Max-Age=3600;
 
+# Not sure why the VSCode REST Client wont save the cookie automatically
+@cookie = Authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiYWQ0NGUxZTgtMTYyOC00ZDlkLTljMmMtNmVhZTI5M2ViYmZkIiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMTYzMTU4OSwiZXhwIjoxNjExNjM1MTg5fQ.nk2PQgqey69ydbrIBwcs3Vh4K_6SVMhAfnzyoDoK_ds; HttpOnly; Max-Age=3600;,Refresh=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiYWQ0NGUxZTgtMTYyOC00ZDlkLTljMmMtNmVhZTI5M2ViYmZkIiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMTYzMTU4OSwiZXhwIjoxNjEyMjM2Mzg5fQ._2uAjI5ntNJB2_1AfeVlfN1lxr5uZZofeNP5dUA5-YA; HttpOnly; Max-Age=604800;
 ###
 # Login
 POST {{baseURL}}/auth/login
@@ -19,6 +20,7 @@ Content-Type: application/json
 # Get All User's Task
 GET {{baseURL}}/tasks/
 Cookie: {{cookie}}
+
 ###
 # Find Task By Id
 GET {{baseURL}}/tasks/5e219547-2a40-4d83-b193-05386a673e1f
@@ -56,8 +58,8 @@ Cookie: Authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTVlYWE4M
 
 {
     "title": "This is newly updated, bahzahh",
-    "userWeight": .5,
-    "computedWeight": .5,
+    "userWeight": ".5",
+    "computedWeight": ".5",
     "isDeferred": false,
     "repeatFloor": 2,
     "repeatCeiling": 2,
