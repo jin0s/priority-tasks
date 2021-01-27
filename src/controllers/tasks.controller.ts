@@ -1,8 +1,6 @@
-import { email } from 'envalid';
-import e, { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { TaskDto } from '../dtos/tasks.dto';
 import { Task } from '../interfaces/tasks.interface';
-import { User } from '../interfaces/users.interface';
 import { decodeToken } from '../services/auth.service';
 import taskService from '../services/tasks.service';
 import { TokenPayloadData } from '../interfaces/auth.interface';

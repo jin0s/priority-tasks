@@ -1,4 +1,3 @@
-import { validate } from 'class-validator';
 import { Router } from 'express';
 import TasksController from '../controllers/tasks.controller';
 import { TaskDto } from '../dtos/tasks.dto';

@@ -23,7 +23,7 @@ if (process.env.NODE_ENV === 'development') {
     },
     pool: {
       min: 0,
-      max: 30,
+      max: 15,
       idle: 10000,
       acquire: 30000,
     },
@@ -46,7 +46,7 @@ if (process.env.NODE_ENV === 'development') {
     },
     pool: {
       min: 0,
-      max: 30,
+      max: 15,
       idle: 10000,
       acquire: 30000,
     },
