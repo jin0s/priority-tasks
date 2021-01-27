@@ -16,26 +16,10 @@ class TaskService {
   }
 
   public async findAllTasks(userUUID: string): Promise<Task[]> {
-    const tasks: Task[] = await this.tasks.findAll({ where: { userId: userUUID, DeletedAt: null }, raw: true });
+    const tasks: Task[] = await this.tasks.findAll({ where: { userId: userUUID, deletedAt: null }, raw: true });
     return tasks;
   }
 
-  // public async findNextTasks(userUUID: string, numberOfTasksToReturn: number): Promise<Task[]> {
-  //   const tasks: Task[] = await this.tasks.findAll({
-  //     where: {
-  //       userId: userUUID,
-  //       deletedAt: null,
-  //       computedWeight: {
-  //         [Op.gte]: userWeight,
-  //       },
-  //       // [Op.and]: [{ ComputedWeight > UserWeight }],
-  //       // [Op.and]: [ where: {  ComputedWeight > UserWeight }]
-  //     },
-  //     //limit: numberOfTasksToReturn,
-  //     raw: true,
-  //   });
-  //   return tasks;
-  // }
   public async findNextTasks(userUUID: string): Promise<any> {
     console.log('id is: ' + userUUID);
     const tasks: Task[] = await sequelize.query(

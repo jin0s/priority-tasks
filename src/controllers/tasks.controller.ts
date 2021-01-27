@@ -1,5 +1,5 @@
 import { email } from 'envalid';
-import { NextFunction, Request, Response } from 'express';
+import e, { NextFunction, Request, Response } from 'express';
 import { TaskDto } from '../dtos/tasks.dto';
 import { Task } from '../interfaces/tasks.interface';
 import { User } from '../interfaces/users.interface';
@@ -11,17 +11,20 @@ class TasksController {
   public taskService = new taskService();
 
   public getTasks = async (req: Request, res: Response, next: NextFunction) => {
-    if (req.params) {
-      console.log('req.next is: ' + req.query.next);
-    }
     const jwtToken = req.cookies.Authorization;
     const tokenData: TokenPayloadData = decodeToken(jwtToken);
     const userUUID = tokenData.uuid;
-    try {
+
+    if (req.params.today) {
       const findAllTasksData: Task[] = await this.taskService.findNextTasks(userUUID);
-      res.status(200).json({ data: findAllTasksData, message: 'findAll' });
-    } catch (error) {
-      next(error);
+      res.status(200).json({ data: findAllTasksData, message: 'findToday' });
+    } else {
+      try {
+        const findAllTasksData: Task[] = await this.taskService.findAllTasks(userUUID);
+        res.status(200).json({ data: findAllTasksData, message: 'findAll' });
+      } catch (error) {
+        next(error);
+      }
     }
   };
 
