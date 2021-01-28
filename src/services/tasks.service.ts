@@ -21,7 +21,6 @@ class TaskService {
   }
 
   public async findNextTasks(userUUID: string): Promise<any> {
-    console.log('id is: ' + userUUID);
     const tasks: Task[] = await sequelize.query(
       'select * from public.tasks where "userId" = :userId and "deletedAt" IS NULL and (date_trunc(\'day\', "lastCompletedDt") + "repeatFloor" * INTERVAL \'1 day\' = date_trunc(\'day\',CURRENT_DATE- INTERVAL \'8 hour\') OR ("computedWeight" > "userWeight"))',
       { replacements: { userId: userUUID }, type: QueryTypes.SELECT },
