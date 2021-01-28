@@ -1,8 +1,6 @@
-import { email } from 'envalid';
 import { NextFunction, Request, Response } from 'express';
 import { TaskDto } from '../dtos/tasks.dto';
 import { Task } from '../interfaces/tasks.interface';
-import { User } from '../interfaces/users.interface';
 import { decodeToken } from '../services/auth.service';
 import taskService from '../services/tasks.service';
 import { TokenPayloadData } from '../interfaces/auth.interface';
@@ -12,20 +10,26 @@ class TasksController {
 
   public getTasks = async (req: Request, res: Response, next: NextFunction) => {
     const jwtToken = req.cookies.Authorization;
-    const tokenData : TokenPayloadData = decodeToken(jwtToken);
+    const tokenData: TokenPayloadData = decodeToken(jwtToken);
     const userUUID = tokenData.uuid;
-    try {
-      const findAllTasksData: Task[] = await this.taskService.findAllTasks(userUUID);
-      res.status(200).json({ data: findAllTasksData, message: 'findAll' });
-    } catch (error) {
-      next(error);
+
+    if (req.params.today) {
+      const findAllTasksData: Task[] = await this.taskService.findNextTasks(userUUID);
+      res.status(200).json({ data: findAllTasksData, message: 'findToday' });
+    } else {
+      try {
+        const findAllTasksData: Task[] = await this.taskService.findAllTasks(userUUID);
+        res.status(200).json({ data: findAllTasksData, message: 'findAll' });
+      } catch (error) {
+        next(error);
+      }
     }
   };
 
   public getTaskById = async (req: Request, res: Response, next: NextFunction) => {
     const taskId = req.params.id;
     const jwtToken = req.cookies.Authorization;
-    const tokenData : TokenPayloadData = decodeToken(jwtToken);
+    const tokenData: TokenPayloadData = decodeToken(jwtToken);
     const userUUID = tokenData.uuid;
 
     try {
@@ -39,9 +43,8 @@ class TasksController {
   public createTask = async (req: Request, res: Response, next: NextFunction) => {
     const taskData: TaskDto = req.body;
     const jwtToken = req.cookies.Authorization;
-    const tokenData : TokenPayloadData = decodeToken(jwtToken);
+    const tokenData: TokenPayloadData = decodeToken(jwtToken);
     const userId = tokenData.uuid;
-
 
     try {
       const createTaskData: Task = await this.taskService.createTask(userId, taskData);
@@ -55,7 +58,7 @@ class TasksController {
     const taskId = req.params.id;
     const taskData: Task = req.body;
     const jwtToken = req.cookies.Authorization;
-    const tokenData : TokenPayloadData = decodeToken(jwtToken);
+    const tokenData: TokenPayloadData = decodeToken(jwtToken);
     const userUUID = tokenData.uuid;
     try {
       const updatedTaskData: Task = await this.taskService.updateTask(userUUID, taskId, taskData);
@@ -65,11 +68,10 @@ class TasksController {
     }
   };
 
-
   public deleteTaskById = async (req: Request, res: Response, next: NextFunction) => {
     const taskId = req.params.id;
     const jwtToken = req.cookies.Authorization;
-    const tokenData : TokenPayloadData = decodeToken(jwtToken);
+    const tokenData: TokenPayloadData = decodeToken(jwtToken);
     const userUUID = tokenData.uuid;
 
     try {
@@ -79,7 +81,6 @@ class TasksController {
       next(error);
     }
   };
-
 }
 
 export default TasksController;

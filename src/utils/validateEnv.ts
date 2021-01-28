@@ -7,7 +7,7 @@ function validateEnv() {
       NODE_ENV: str(),
       DATABASE_URL: str(),
       JWT_SECRET: str(),
-      REFRESH_JWT_SECRET: str()
+      REFRESH_JWT_SECRET: str(),
     };
   } else {
     envVars = {
@@ -18,7 +18,7 @@ function validateEnv() {
       PG_DATABASE: str(),
       JWT_SECRET: str(),
       PORT: port(),
-      REFRESH_JWT_SECRET: str()
+      REFRESH_JWT_SECRET: str(),
     };
   }
   cleanEnv(process.env, envVars);

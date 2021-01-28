@@ -2,23 +2,20 @@ import { Sequelize } from 'sequelize-typescript';
 import Task from './tasks.model';
 import User from './users.model';
 
-var sequelize: Sequelize
+let sequelize: Sequelize;
 if (process.env.NODE_ENV === 'development') {
-  sequelize = new Sequelize(
-    process.env.PG_DATABASE,
-    process.env.PG_USER,
-    process.env.PG_PASSWORD, {
-      host: process.env.PG_HOST,
-      port: parseInt(process.env.PG_PORT),
-      protocol: 'postgres',
-      logging: console.log,
-      dialect: 'postgres',
-      dialectOptions: {
-        ssl: {
-          require: true,
-          rejectUnauthorized: false
-        }
+  sequelize = new Sequelize(process.env.PG_DATABASE, process.env.PG_USER, process.env.PG_PASSWORD, {
+    host: process.env.PG_HOST,
+    port: parseInt(process.env.PG_PORT),
+    protocol: 'postgres',
+    logging: console.log,
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
       },
+    },
     timezone: '-05:00',
     define: {
       charset: 'utf8mb4',
@@ -39,8 +36,8 @@ if (process.env.NODE_ENV === 'development') {
     dialectOptions: {
       ssl: {
         require: true,
-        rejectUnauthorized: false
-      }
+        rejectUnauthorized: false,
+      },
     },
     timezone: '-05:00',
     define: {

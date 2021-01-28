@@ -52,7 +52,7 @@ class AuthService {
   public createToken(user: User): TokenData {
     const dataStoredInToken: DataStoredInToken = { uuid: user.userId, email: user.email };
     const secret: string = process.env.JWT_SECRET;
-    const expiresIn: number = 60 * 60 // 1 hour
+    const expiresIn: number = 60 * 60; // 1 hour
 
     return { expiresIn, token: jwt.sign(dataStoredInToken, secret, { expiresIn }) };
   }
@@ -64,7 +64,7 @@ class AuthService {
   public createRefreshToken(user: User): TokenData {
     const dataStoredInToken: DataStoredInToken = { uuid: user.userId, email: user.email };
     const secret: string = process.env.REFRESH_JWT_SECRET;
-    const expiresIn: number = 7 * 24 * 60 * 60 // 7 days
+    const expiresIn: number = 7 * 24 * 60 * 60; // 7 days
 
     return { expiresIn, token: jwt.sign(dataStoredInToken, secret, { expiresIn }) };
   }
@@ -73,26 +73,26 @@ class AuthService {
     return `Refresh=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`;
   }
 
-  public refresh(refreshToken: string): {cookies: string[], userData : User} {
-    const refreshTokenData : TokenPayloadData = decodeToken(refreshToken);
+  public refresh(refreshToken: string): { cookies: string[]; userData: User } {
+    const refreshTokenData: TokenPayloadData = decodeToken(refreshToken);
     const cookies: string[] = [];
-    const userData : User = {
+    const userData: User = {
       email: refreshTokenData.email,
       userId: refreshTokenData.uuid,
-      password: 'password not important here'
-    }
+      password: 'password not important here',
+    };
     const jwtToken = this.createToken(userData);
     cookies.push(this.createCookie(jwtToken));
-    const newRefreshToken = this.createRefreshToken(userData)
+    const newRefreshToken = this.createRefreshToken(userData);
     cookies.push(this.createRefreshCookie(newRefreshToken));
 
-    return {cookies, userData};
+    return { cookies, userData };
   }
 }
 
-export function decodeToken(jwtToken) : TokenPayloadData {
+export function decodeToken(jwtToken): TokenPayloadData {
   const payload = jwt.decode(jwtToken, { json: true }) as TokenPayloadData;
-  return payload
+  return payload;
 }
 
 export default AuthService;
