@@ -2,6 +2,16 @@ import { IsBoolean, IsDate, IsDateString, IsDecimal, IsNumber, IsString, IsUUID,
 import { Max, Min } from 'sequelize-typescript';
 
 export class TaskDto {
+  public constructor(init: TaskDto) {
+    Object.assign(this, init);
+  }
+
+  @IsUUID(4)
+  public taskId: string;
+
+  @IsUUID(4)
+  public userId: string;
+
   @MaxLength(50, {
     message: 'Title is too long',
   })
