@@ -5,6 +5,7 @@ import { Task } from '../interfaces/tasks.interface';
 import sequelize from '../models/index.model';
 import { QueryTypes } from 'sequelize';
 import { isToday } from 'date-fns';
+import { sortTasks } from '../utils/util';
 
 class TaskService {
   public tasks = tasksModel;
@@ -30,7 +31,9 @@ class TaskService {
       return !isToday(task.lastDeferredDt);
     });
 
-    return filteredTasks;
+    const sortedTasks = sortTasks(filteredTasks);
+
+    return sortedTasks;
   }
 
   public async findTaskById(taskId: string): Promise<Task> {
