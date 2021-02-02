@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import { TaskDto } from '../dtos/tasks.dto';
 import { Task } from '../interfaces/tasks.interface';
 import { decodeToken } from '../services/auth.service';
 import taskService from '../services/tasks.service';
@@ -41,7 +40,7 @@ class TasksController {
   };
 
   public createTask = async (req: Request, res: Response, next: NextFunction) => {
-    const taskData: TaskDto = req.body;
+    const taskData: Task = req.body;
     const jwtToken = req.cookies.Authorization;
     const tokenData: TokenPayloadData = decodeToken(jwtToken);
     const userId = tokenData.uuid;

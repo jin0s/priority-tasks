@@ -3,7 +3,6 @@ import App from '../src/app';
 import { Task } from '../src/interfaces/tasks.interface';
 import taskModel from '../src/models/tasks.model';
 import TaskRoute from '../src/routes/tasks.route';
-import { TaskDto } from '../src/dtos/tasks.dto';
 import AuthRoute from '../src/routes/auth.route';
 import { UserDto } from '../src/dtos/users.dto';
 import PgPool from '../src/services/postgres.service';
@@ -69,7 +68,7 @@ describe('Testing Users', () => {
       };
       const response = await agent.post(`${authRoute.path}/login`).send(userData); 
 
-      const taskData: TaskDto = {
+      const taskData: Task = {
         title: "New Task",
         userWeight: ".5",
         computedWeight: ".5",
@@ -98,7 +97,7 @@ describe('Testing Users', () => {
       const response = await agent.post(`${authRoute.path}/login`).send(userData); 
 
       const taskId ='1d100f42-aa2a-4892-9896-a936b69c9c45';
-      const taskData: TaskDto = {
+      const taskData: Task = {
         title: "Task is now updated",
         userWeight: ".5",
         computedWeight: ".5",
@@ -125,7 +124,7 @@ describe('Testing Users', () => {
       };
       var response = await agent.post(`${authRoute.path}/login`).send(userData); 
 
-      const taskData: TaskDto = {
+      const taskData: Task = {
         title: "New Task",
         userWeight: ".5",
         computedWeight: ".5",

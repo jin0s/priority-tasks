@@ -1,15 +1,15 @@
-import { TaskDto } from '../dtos/tasks.dto';
 import HttpException from '../exceptions/HttpException';
 import tasksModel from '../models/tasks.model';
 import { Task } from '../interfaces/tasks.interface';
 import sequelize from '../models/index.model';
 import { QueryTypes } from 'sequelize';
+import { isToday } from 'date-fns';
+import { sortTasks } from '../utils/util';
 
-// import QueryTypes from ''
 class TaskService {
   public tasks = tasksModel;
 
-  public async createTask(userUUID, taskData: TaskDto): Promise<Task> {
+  public async createTask(userUUID, taskData: Task): Promise<Task> {
     const createTaskData: Task = await this.tasks.create({ ...taskData, userId: userUUID });
 
     return createTaskData;
@@ -21,13 +21,18 @@ class TaskService {
   }
 
   public async findNextTasks(userUUID: string): Promise<any> {
-    console.log('id is: ' + userUUID);
     const tasks: Task[] = await sequelize.query(
       'select * from public.tasks where "userId" = :userId and "deletedAt" IS NULL and (date_trunc(\'day\', "lastCompletedDt") + "repeatFloor" * INTERVAL \'1 day\' = date_trunc(\'day\',CURRENT_DATE- INTERVAL \'8 hour\') OR ("computedWeight" > "userWeight"))',
       { replacements: { userId: userUUID }, type: QueryTypes.SELECT },
     );
 
-    return tasks;
+    const filteredTasks = tasks.filter(function (task) {
+      return !isToday(task.lastDeferredDt);
+    });
+
+    const sortedTasks = sortTasks(filteredTasks);
+
+    return sortedTasks;
   }
 
   public async findTaskById(taskId: string): Promise<Task> {
