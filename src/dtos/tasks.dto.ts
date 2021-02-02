@@ -1,20 +1,16 @@
 import { IsBoolean, IsDate, IsDateString, IsDecimal, IsNumber, IsString, IsUUID, MaxLength } from 'class-validator';
 import { Max, Min } from 'sequelize-typescript';
+import { Task } from '../interfaces/tasks.interface';
 
-export class TaskDto {
-  public constructor(init: TaskDto) {
+export class TaskDto implements Task {
+  public constructor(init: Task) {
     Object.assign(this, init);
   }
-
-  @IsUUID(4)
-  public taskId: string;
-
-  @IsUUID(4)
-  public userId: string;
 
   @MaxLength(50, {
     message: 'Title is too long',
   })
+
   @IsString()
   public title: string;
 

@@ -1,12 +1,12 @@
 export interface Task {
-  taskId: string;
-  userId: string;
+  taskId?: string;
+  userId?: string;
   title: string;
-  userWeight: number;
-  computerWeight: number;
+  userWeight: number | string;
+  computedWeight?: number | string;
   isDeferred: boolean;
   repeatFloor: number;
   repeatCeiling: number;
-  lastCompletedDate: Date;
-  lastDeferredDate: Date;
+  lastCompletedDt: Date;
+  lastDeferredDt: Date;
 }
