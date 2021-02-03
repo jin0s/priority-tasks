@@ -20,6 +20,8 @@ class TasksRoute implements Route {
     this.router.put(`${this.path}/:id`, authMiddleware, validationMiddleware(TaskDto), this.tasksController.updateTask);
     this.router.delete(`${this.path}/:id`, authMiddleware, this.tasksController.deleteTaskById);
     this.router.post(`${this.path}`, authMiddleware, validationMiddleware(TaskDto), this.tasksController.createTask);
+    this.router.put(`${this.path}/defer/:id`, authMiddleware, this.tasksController.deferTasks);
+    this.router.put(`${this.path}/complete/:id`, authMiddleware, this.tasksController.completeTask);
   }
 }
 

@@ -27,4 +27,18 @@ export const sortTasks = (tasks: Task[]): Task[] => {
         : -1
       : -1,
   );
-};
+}
+
+/*
+* The method calculates the new computedWeight when a user defers a task
+* If the new computedWeight > 100 default value to 100
+* Input currentComputedWeight, Outputs: currentComputedWeight + 10
+*/
+  export const computeWeightOnDefer = (currentComputedWeight: number): number => {
+    const newComputedWeight = currentComputedWeight + 10;
+    if(newComputedWeight > 100) {
+      return 100
+    } else {
+      return currentComputedWeight + 10;
+    }
+  };

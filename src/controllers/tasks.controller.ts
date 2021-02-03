@@ -80,6 +80,34 @@ class TasksController {
       next(error);
     }
   };
+
+  public deferTasks = async (req: Request, res: Response, next: NextFunction) => {
+    const taskId = req.params.id;
+    const jwtToken = req.cookies.Authorization;
+    const tokenData: TokenPayloadData = decodeToken(jwtToken);
+    const userUUID = tokenData.uuid;
+
+    try {
+      const deferredTask: Task = await this.taskService.deferTask(userUUID, taskId);
+      res.status(200).json({ data: deferredTask, message: 'deferred' });
+    } catch (error) {
+      next(error);
+    }
+  };
+  
+  public completeTask = async (req: Request, res: Response, next: NextFunction) => {
+    const taskId = req.params.id;
+    const jwtToken = req.cookies.Authorization;
+    const tokenData: TokenPayloadData = decodeToken(jwtToken);
+    const userUUID = tokenData.uuid;
+
+    try {
+      const deferredTask: Task = await this.taskService.completeTask(userUUID, taskId);
+      res.status(200).json({ data: deferredTask, message: 'deferred' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default TasksController;
