@@ -70,8 +70,8 @@ describe('Testing Users', () => {
 
       const taskData: Task = {
         title: "New Task",
-        userWeight: ".5",
-        computedWeight: ".5",
+        userWeight: 5,
+        computedWeight: 5,
         isDeferred: false,
         repeatFloor: 2,
         repeatCeiling: 2,
@@ -99,8 +99,8 @@ describe('Testing Users', () => {
       const taskId ='1d100f42-aa2a-4892-9896-a936b69c9c45';
       const taskData: Task = {
         title: "Task is now updated",
-        userWeight: ".5",
-        computedWeight: ".5",
+        userWeight: 5,
+        computedWeight: 5,
         isDeferred: false,
         repeatFloor: 2,
         repeatCeiling: 2,
@@ -126,8 +126,8 @@ describe('Testing Users', () => {
 
       const taskData: Task = {
         title: "New Task",
-        userWeight: ".5",
-        computedWeight: ".5",
+        userWeight: 5,
+        computedWeight: 5,
         isDeferred: false,
         repeatFloor: 2,
         repeatCeiling: 2,
