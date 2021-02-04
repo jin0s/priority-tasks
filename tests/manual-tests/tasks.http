@@ -5,7 +5,7 @@
 @baseURL = http://localhost:5000
 
 # Not sure why the VSCode REST Client wont save the cookie automatically
-@cookie = Authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZDBlODkwNzgtODc2NC00YmI0LWI1YjItYThhZWIxMTcxNDlmIiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMjMxOTk3OCwiZXhwIjoxNjEyMzIzNTc4fQ.rtUeJ9hbBpReuDHc6cc4zt1wMn9iirUhGvENicBW81U; HttpOnly; Max-Age=3600;,Refresh=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZDBlODkwNzgtODc2NC00YmI0LWI1YjItYThhZWIxMTcxNDlmIiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMjMxOTk3OCwiZXhwIjoxNjEyOTI0Nzc4fQ.8Zp-VSMB0Jj0Lwe2yigq1jphKBNjMPSh0A1_5km8qG0; HttpOnly; Max-Age=604800;
+@cookie = Authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTBiMzg1NTItZmEwNy00ZTljLWI0YWUtY2IwMWY0Yzk3MTQ1IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMjQwMjkwMiwiZXhwIjoxNjEyNDA2NTAyfQ.97TUFuk6_ujTvg76GkyOsjbpC4vi9VLIKNGCEMst9C4; HttpOnly; Max-Age=3600;,Refresh=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTBiMzg1NTItZmEwNy00ZTljLWI0YWUtY2IwMWY0Yzk3MTQ1IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMjQwMjkwMiwiZXhwIjoxNjEzMDA3NzAyfQ.Jib1uC-Ic_bv8E3fMw0Kx_MZlbtnHt4qoAAotX-OTX4; HttpOnly; Max-Age=604800;
 
 ###
 # Login
@@ -40,13 +40,13 @@ Cookie: {{cookie}}
 
 {
     "title": "Update something else",
-    "userWeight": 5,
-    "computedWeight": 5,
-    "isDeferred": false,
+    "userWeight": 50,
+    "computedWeight": 60,
+    "isDeferred": true,
     "repeatFloor": 2,
     "repeatCeiling": 2,
-    "lastCompletedDt": "2021-01-01T00:00:00.001Z",
-    "lastDeferredDt": "2021-01-01T00:00:00.001Z"
+    "lastCompletedDt": "2021-01-31T00:00:00.000Z",
+    "lastDeferredDt": "2021-02-03T01:12:40.208Z"
 }
 
 
@@ -58,29 +58,34 @@ Cookie: {{cookie}}
 
 ###
 # Update Task
-PUT {{baseURL}}/tasks/0d52313a-88a6-4eed-a43a-4ea2a3dbac0c
+PUT {{baseURL}}/tasks/7c6b034d-0566-4d58-bd2c-1922ed036227
 Content-Type: application/json
 Cookie: {{cookie}}
 
 {
+    "taskId": "7c6b034d-0566-4d58-bd2c-1922ed036227",
     "title": "Update something else",
     "userWeight": 50,
-    "computedWeight": 50,
-    "isDeferred": false,
+    "computedWeight": 60,
+    "isDeferred": true,
     "repeatFloor": 2,
     "repeatCeiling": 2,
-    "lastCompletedDt": "2021-01-31T00:00:00.00Z",
-    "lastDeferredDt": "2021-01-01T00:00:00.001Z"
+    "lastCompletedDt": "2021-01-31T00:00:00.000Z",
+    "lastDeferredDt": "2021-02-03T01:12:40.208Z"
 }
 
 ###
 # Defer Task
-PUT {{baseURL}}/tasks/defer/0d52313a-88a6-4eed-a43a-4ea2a3dbac0c
+PUT {{baseURL}}/tasks/defer/7c6b034d-0566-4d58-bd2c-1922ed036227
+Content-Type: application/json
 Cookie: {{cookie}}
 
+{
+    "deferredUntilDt": "2021-02-05T00:00:00.000Z"
+}
 
 ###
 # Complete Task
-PUT {{baseURL}}/tasks/complete/0d52313a-88a6-4eed-a43a-4ea2a3dbac0c
+PUT {{baseURL}}/tasks/complete/7c6b034d-0566-4d58-bd2c-1922ed036227
 Cookie: {{cookie}}
 

@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, IsDateString, IsDecimal, IsNumber, IsString, IsUUID, MaxLength, IsInt, Max, Min } from 'class-validator';
+import { IsBoolean, IsDate, IsDateString, IsDecimal, IsNumber, IsString, IsUUID, MaxLength, IsInt, Max, Min, IsOptional } from 'class-validator';
 import { Task } from '../interfaces/tasks.interface';
 
 export class TaskDto implements Task {
@@ -38,4 +38,10 @@ export class TaskDto implements Task {
 
   @IsDateString()
   lastDeferredDt: Date;
+}
+
+export class DeferredUntilDto {
+  @IsOptional()
+  @IsDateString()
+  deferredUntilDt: Date;
 }

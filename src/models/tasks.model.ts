@@ -72,4 +72,8 @@ export default class Task extends Model<Task> {
   @AllowNull(true)
   @Column(DataTypes.DATE)
   lastDeferredDt: Date;
+
+  @AllowNull(true)
+  @Column(DataTypes.DATE)
+  deferredUntilDt: Date;
 }

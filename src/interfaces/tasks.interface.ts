@@ -9,4 +9,5 @@ export interface Task {
   repeatCeiling: number;
   lastCompletedDt: Date;
   lastDeferredDt: Date;
+  deferredUntilDt?: Date;
 }

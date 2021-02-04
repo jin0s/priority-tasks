@@ -88,7 +88,7 @@ class TasksController {
     const userUUID = tokenData.uuid;
 
     try {
-      const deferredTask: Task = await this.taskService.deferTask(userUUID, taskId);
+      const deferredTask: Task = await this.taskService.deferTask(userUUID, taskId, req.body.deferredUntilDt);
       res.status(200).json({ data: deferredTask, message: 'deferred' });
     } catch (error) {
       next(error);

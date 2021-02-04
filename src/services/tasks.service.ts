@@ -26,11 +26,17 @@ class TaskService {
       { replacements: { userId: userUUID }, type: QueryTypes.SELECT },
     );
 
+    // Filter if task was deferred today
     const filteredTasks = tasks.filter(function (task) {
-      return !isToday(task.lastDeferredDt);
+      return (!isToday(task.lastDeferredDt));
     });
 
-    const sortedTasks = sortTasks(filteredTasks);
+    // Filter out a task until the deferredUntilDt
+    const filteredTasksX2 = filteredTasks.filter(function (task) {
+      return (new Date() >= task.deferredUntilDt);
+    });
+
+    const sortedTasks = sortTasks(filteredTasksX2);
 
     return sortedTasks;
   }
@@ -75,18 +81,29 @@ class TaskService {
    *  2. update last defered date to today
    *  3. set isDefered to true
    */
-  public async deferTask(userId: string, taskId: string): Promise<Task> {
+  public async deferTask(userId: string, taskId: string, deferredUntilDt?: Date): Promise<Task> {
     const task: Task = await this.findTaskByUserAndId(userId, taskId);
     if (!task) throw new HttpException(409, 'Task did not exist to defer');
-    task.computedWeight = computeWeightOnDefer(task.computedWeight);
-    const deferredTask: Task = await this.tasks.update({
-      computedWeight: task.computedWeight,
-      isDeferred: true,
-      lastDeferredDt: new Date().toISOString(),
-    }, {
-      where: { taskId: task.taskId, userId: task.userId },
-      returning: true
-    });
+    var deferredTask: Task;
+    if (deferredUntilDt !== null) {
+        deferredTask = await this.tasks.update({
+        deferredUntilDt: deferredUntilDt,
+        isDeferred: true,
+      }, {
+        where: { taskId: task.taskId, userId: task.userId },
+        returning: true
+      });
+    } else {
+        task.computedWeight = computeWeightOnDefer(task.computedWeight);
+        deferredTask = await this.tasks.update({
+        computedWeight: task.computedWeight,
+        isDeferred: true,
+        lastDeferredDt: new Date().toISOString(),
+      }, {
+        where: { taskId: task.taskId, userId: task.userId },
+        returning: true
+      });
+    }
     return deferredTask;
   }
 
