@@ -26,17 +26,15 @@ class TaskService {
       { replacements: { userId: userUUID }, type: QueryTypes.SELECT },
     );
 
-    // Filter if task was deferred today
     const filteredTasks = tasks.filter(function (task) {
-      return (!isToday(task.lastDeferredDt));
+      // Filter if task was deferred today
+      var passedFilter: boolean = (!isToday(task.lastDeferredDt))
+      && (new Date() >= task.deferredUntilDt);
+      // Filter out a task until the deferredUntilDt
+      return passedFilter;
     });
 
-    // Filter out a task until the deferredUntilDt
-    const filteredTasksX2 = filteredTasks.filter(function (task) {
-      return (new Date() >= task.deferredUntilDt);
-    });
-
-    const sortedTasks = sortTasks(filteredTasksX2);
+    const sortedTasks = sortTasks(filteredTasks);
 
     return sortedTasks;
   }
@@ -75,7 +73,7 @@ class TaskService {
     return updatedTask;
   }
 
-    /**
+   /**
    * When user hits this service the task's 
    *  1. update computed weight to user weight + calculation business logic
    *  2. update last defered date to today
@@ -84,26 +82,27 @@ class TaskService {
   public async deferTask(userId: string, taskId: string, deferredUntilDt?: Date): Promise<Task> {
     const task: Task = await this.findTaskByUserAndId(userId, taskId);
     if (!task) throw new HttpException(409, 'Task did not exist to defer');
-    var deferredTask: Task;
-    if (deferredUntilDt !== null) {
-        deferredTask = await this.tasks.update({
+    
+    var updateValues;
+    if (deferredUntilDt !== undefined) {
+      updateValues = {
         deferredUntilDt: deferredUntilDt,
         isDeferred: true,
-      }, {
-        where: { taskId: task.taskId, userId: task.userId },
-        returning: true
-      });
+      }
     } else {
-        task.computedWeight = computeWeightOnDefer(task.computedWeight);
-        deferredTask = await this.tasks.update({
-        computedWeight: task.computedWeight,
+      updateValues = {
+        computedWeight: computeWeightOnDefer(task.computedWeight),
         isDeferred: true,
         lastDeferredDt: new Date().toISOString(),
-      }, {
-        where: { taskId: task.taskId, userId: task.userId },
-        returning: true
-      });
+      }
     }
+
+    const queryOptions = {
+      where: { taskId: task.taskId, userId: task.userId },
+      returning: true
+    }
+
+    const deferredTask: Task = await this.tasks.update(updateValues, queryOptions);
     return deferredTask;
   }
 

@@ -5,7 +5,7 @@
 @baseURL = http://localhost:5000
 
 # Not sure why the VSCode REST Client wont save the cookie automatically
-@cookie = Authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTBiMzg1NTItZmEwNy00ZTljLWI0YWUtY2IwMWY0Yzk3MTQ1IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMjQwMjkwMiwiZXhwIjoxNjEyNDA2NTAyfQ.97TUFuk6_ujTvg76GkyOsjbpC4vi9VLIKNGCEMst9C4; HttpOnly; Max-Age=3600;,Refresh=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTBiMzg1NTItZmEwNy00ZTljLWI0YWUtY2IwMWY0Yzk3MTQ1IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMjQwMjkwMiwiZXhwIjoxNjEzMDA3NzAyfQ.Jib1uC-Ic_bv8E3fMw0Kx_MZlbtnHt4qoAAotX-OTX4; HttpOnly; Max-Age=604800;
+@cookie = Authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTBiMzg1NTItZmEwNy00ZTljLWI0YWUtY2IwMWY0Yzk3MTQ1IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMjQxNDU2NSwiZXhwIjoxNjEyNDE4MTY1fQ.5mBcOFrSEu_U7wI5oaSOWjSEjUrE9uAI1Cx4LAmUvoA; HttpOnly; Max-Age=3600;,Refresh=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTBiMzg1NTItZmEwNy00ZTljLWI0YWUtY2IwMWY0Yzk3MTQ1IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMjQxNDU2NiwiZXhwIjoxNjEzMDE5MzY2fQ.VsY0ct1HnOMiGRVkHfaA5K-I3IS29b7SHlcmsC6hh-U; HttpOnly; Max-Age=604800;
 
 ###
 # Login
@@ -80,9 +80,6 @@ PUT {{baseURL}}/tasks/defer/7c6b034d-0566-4d58-bd2c-1922ed036227
 Content-Type: application/json
 Cookie: {{cookie}}
 
-{
-    "deferredUntilDt": "2021-02-05T00:00:00.000Z"
-}
 
 ###
 # Complete Task
