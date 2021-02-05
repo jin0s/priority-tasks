@@ -1,5 +1,4 @@
-import { IsBoolean, IsDate, IsDateString, IsDecimal, IsNumber, IsString, IsUUID, MaxLength } from 'class-validator';
-import { Max, Min } from 'sequelize-typescript';
+import { IsBoolean, IsDate, IsDateString, IsDecimal, IsNumber, IsString, IsUUID, MaxLength, IsInt, Max, Min, IsOptional } from 'class-validator';
 import { Task } from '../interfaces/tasks.interface';
 
 export class TaskDto implements Task {
@@ -10,19 +9,18 @@ export class TaskDto implements Task {
   @MaxLength(50, {
     message: 'Title is too long',
   })
-
   @IsString()
   public title: string;
 
-  @IsDecimal()
-  // @Min(0.01)
-  // @Max(1.0)
-  public userWeight: string;
+  @IsInt()
+  @Min(1)
+  @Max(100)
+  public userWeight: number;
 
-  @IsDecimal()
-  // @Min(0.01)
-  // @Max(1.0)
-  public computedWeight: string;
+  @IsInt()
+  @Min(1)
+  @Max(100)
+  public computedWeight: number;
 
   @IsBoolean()
   public isDeferred: boolean;
@@ -31,7 +29,7 @@ export class TaskDto implements Task {
   // @Min(1)
   public repeatFloor: number;
 
-  @IsNumber()
+  @IsInt()
   // @Max(365)
   public repeatCeiling: number;
 
@@ -40,4 +38,10 @@ export class TaskDto implements Task {
 
   @IsDateString()
   lastDeferredDt: Date;
+}
+
+export class DeferredUntilDto {
+  @IsOptional()
+  @IsDateString()
+  deferredUntilDt: Date;
 }

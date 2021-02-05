@@ -2,9 +2,9 @@ import HttpException from '../exceptions/HttpException';
 import tasksModel from '../models/tasks.model';
 import { Task } from '../interfaces/tasks.interface';
 import sequelize from '../models/index.model';
-import { QueryTypes } from 'sequelize';
+import { QueryTypes, where } from 'sequelize';
 import { isToday } from 'date-fns';
-import { sortTasks } from '../utils/util';
+import { computeWeightOnDefer, sortTasks } from '../utils/util';
 
 class TaskService {
   public tasks = tasksModel;
@@ -22,12 +22,16 @@ class TaskService {
 
   public async findNextTasks(userUUID: string): Promise<any> {
     const tasks: Task[] = await sequelize.query(
-      'select * from public.tasks where "userId" = :userId and "deletedAt" IS NULL and (date_trunc(\'day\', "lastCompletedDt") + "repeatFloor" * INTERVAL \'1 day\' = date_trunc(\'day\',CURRENT_DATE- INTERVAL \'8 hour\') OR ("computedWeight" > "userWeight"))',
+      'select * from public.tasks where "userId" = :userId and "deletedAt" IS NULL and (date_trunc(\'day\', "lastCompletedDt") + "repeatFloor" * INTERVAL \'1 day\' <= date_trunc(\'day\',CURRENT_DATE- INTERVAL \'8 hour\') OR ("computedWeight" > "userWeight"))',
       { replacements: { userId: userUUID }, type: QueryTypes.SELECT },
     );
 
     const filteredTasks = tasks.filter(function (task) {
-      return !isToday(task.lastDeferredDt);
+      // Filter if task was deferred today
+      var passedFilter: boolean = (!isToday(task.lastDeferredDt))
+      && (new Date() >= task.deferredUntilDt);
+      // Filter out a task until the deferredUntilDt
+      return passedFilter;
     });
 
     const sortedTasks = sortTasks(filteredTasks);
@@ -37,8 +41,13 @@ class TaskService {
 
   public async findTaskById(taskId: string): Promise<Task> {
     const findTask: Task = await this.tasks.findByPk(taskId);
-    // if (!findTask) throw new HttpException(409, 'Task not Found.');
+    if (!findTask) throw new HttpException(409, 'Task not Found.');
+    return findTask;
+  }
 
+  public async findTaskByUserAndId(userId: string, taskId: string): Promise<Task> {
+    const findTask: Task = await this.tasks.findOne({ where: { taskId: taskId, userId: userId } });
+    if (!findTask) throw new HttpException(409, 'Task not Found.');
     return findTask;
   }
 
@@ -60,9 +69,65 @@ class TaskService {
     // const lastDeferredDate = taskData.lastDeferredDate;
 
     const updatedTask: Task = await this.tasks.update({ ...taskData }, { where: { taskId: taskId, userId: userUUID }, returning: true });
-    if (!updatedTask) throw new HttpException(409, 'Task did not exist');
+    if (!updatedTask) throw new HttpException(409, 'Task did not exist to update');
     return updatedTask;
   }
+
+   /**
+   * When user hits this service the task's 
+   *  1. update computed weight to user weight + calculation business logic
+   *  2. update last defered date to today
+   *  3. set isDefered to true
+   */
+  public async deferTask(userId: string, taskId: string, deferredUntilDt?: Date): Promise<Task> {
+    const task: Task = await this.findTaskByUserAndId(userId, taskId);
+    if (!task) throw new HttpException(409, 'Task did not exist to defer');
+    
+    var updateValues;
+    if (deferredUntilDt !== undefined) {
+      updateValues = {
+        deferredUntilDt: deferredUntilDt,
+        isDeferred: true,
+      }
+    } else {
+      updateValues = {
+        computedWeight: computeWeightOnDefer(task.computedWeight),
+        isDeferred: true,
+        lastDeferredDt: new Date().toISOString(),
+      }
+    }
+
+    const queryOptions = {
+      where: { taskId: task.taskId, userId: task.userId },
+      returning: true
+    }
+
+    const deferredTask: Task = await this.tasks.update(updateValues, queryOptions);
+    return deferredTask;
+  }
+
+  /**
+   * When user hits this service the task's 
+   *  1. update computed weight to user weight
+   *  2. update last completed date to today
+   *  3. set isDefered to false
+   */
+  public async completeTask(userId: string, taskId: string): Promise<Task> {
+    const task: Task = await this.findTaskByUserAndId(userId, taskId);
+    if (!task) throw new HttpException(409, 'Task did not exist to complete');
+    const deferredTask: Task = await this.tasks.update({
+      computedWeight: task.userWeight,
+      isDeferred: false,
+      lastCompletedDt: new Date().toISOString()
+    }, {
+      where: { taskId: task.taskId, userId: task.userId },
+      returning: true
+    });
+
+    return deferredTask;
+  }
+
+
 }
 
 export default TaskService;

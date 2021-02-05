@@ -13,18 +13,32 @@ export const isEmptyObject = (obj: any): boolean => {
 export const sortTasks = (tasks: Task[]): Task[] => {
   return tasks.sort((a, b) =>
     // First sort by computedWeight descending
-    parseFloat(b.computedWeight as string) > parseFloat(a.computedWeight as string)
+    b.computedWeight  > a.computedWeight
       ? 1
       : // If tied sort by userWeight descending
-      parseFloat(b.computedWeight as string) === parseFloat(a.computedWeight as string)
-      ? parseFloat(b.userWeight as string ) > parseFloat(a.userWeight as string )
+      b.computedWeight === a.computedWeight
+      ? b.userWeight > a.userWeight
         ? 1
         : // If tied sort by delta between ceiling and floor ascending
-        parseFloat(b.userWeight as string) === parseFloat(a.userWeight as string)
+        b.userWeight === a.userWeight
         ? b.repeatCeiling - b.repeatFloor < a.repeatCeiling - b.repeatFloor
           ? 1
           : -1
         : -1
       : -1,
   );
-};
+}
+
+/*
+* The method calculates the new computedWeight when a user defers a task
+* If the new computedWeight > 100 default value to 100
+* Input currentComputedWeight, Outputs: currentComputedWeight + 10
+*/
+  export const computeWeightOnDefer = (currentComputedWeight: number): number => {
+    const newComputedWeight = currentComputedWeight + 10;
+    if(newComputedWeight > 100) {
+      return 100
+    } else {
+      return currentComputedWeight + 10;
+    }
+  };

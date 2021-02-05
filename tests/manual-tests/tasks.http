@@ -3,10 +3,10 @@
 ###
 # baseURL
 @baseURL = http://localhost:5000
-@cookie = Authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTVlYWE4M2MtZjlmMi00MWUyLTkxMzItODk2NmIxZmVkNTg0IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMTcxNjU5NCwiZXhwIjoxNjExNzIwMTk0fQ.fSrZ4KOMZvlRnkSMUyEdSpSqvLTcQfOYH0dsWB5Y43o; HttpOnly; Max-Age=3600;
 
 # Not sure why the VSCode REST Client wont save the cookie automatically
-@cookie = Authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiYWQ0NGUxZTgtMTYyOC00ZDlkLTljMmMtNmVhZTI5M2ViYmZkIiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMTYzMTU4OSwiZXhwIjoxNjExNjM1MTg5fQ.nk2PQgqey69ydbrIBwcs3Vh4K_6SVMhAfnzyoDoK_ds; HttpOnly; Max-Age=3600;,Refresh=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiYWQ0NGUxZTgtMTYyOC00ZDlkLTljMmMtNmVhZTI5M2ViYmZkIiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMTYzMTU4OSwiZXhwIjoxNjEyMjM2Mzg5fQ._2uAjI5ntNJB2_1AfeVlfN1lxr5uZZofeNP5dUA5-YA; HttpOnly; Max-Age=604800;
+@cookie = Authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTBiMzg1NTItZmEwNy00ZTljLWI0YWUtY2IwMWY0Yzk3MTQ1IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMjQxNDU2NSwiZXhwIjoxNjEyNDE4MTY1fQ.5mBcOFrSEu_U7wI5oaSOWjSEjUrE9uAI1Cx4LAmUvoA; HttpOnly; Max-Age=3600;,Refresh=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTBiMzg1NTItZmEwNy00ZTljLWI0YWUtY2IwMWY0Yzk3MTQ1IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMjQxNDU2NiwiZXhwIjoxNjEzMDE5MzY2fQ.VsY0ct1HnOMiGRVkHfaA5K-I3IS29b7SHlcmsC6hh-U; HttpOnly; Max-Age=604800;
+
 ###
 # Login
 POST {{baseURL}}/auth/login
@@ -16,6 +16,7 @@ Content-Type: application/json
     "email": "example@gmail.com",
 	"password": "qwer1234"
 }
+
 ###
 # Get All User's Task
 GET {{baseURL}}/tasks
@@ -39,35 +40,49 @@ Cookie: {{cookie}}
 
 {
     "title": "Update something else",
-    "userWeight": ".5",
-    "computedWeight": ".5",
-    "isDeferred": false,
+    "userWeight": 50,
+    "computedWeight": 60,
+    "isDeferred": true,
     "repeatFloor": 2,
     "repeatCeiling": 2,
-    "lastCompletedDt": "2021-01-01T00:00:00.001Z",
-    "lastDeferredDt": "2021-01-01T00:00:00.001Z"
+    "lastCompletedDt": "2021-01-31T00:00:00.000Z",
+    "lastDeferredDt": "2021-02-03T01:12:40.208Z"
 }
 
 
 ###
 # Delete Task
-DELETE {{baseURL}}/tasks/7b0d9fba-18f5-44ff-aedd-ec923a53ce12
-Cookie: Authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTVlYWE4M2MtZjlmMi00MWUyLTkxMzItODk2NmIxZmVkNTg0IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMTAyMzgwOCwiZXhwIjoxNjExMDI3NDA4fQ.0vhvrh9PBGFfjblOCf5jg3of3UEAVxSmSj_m99VLcqY; HttpOnly; Max-Age=3600;
+DELETE {{baseURL}}/tasks/a7554683-b8a3-47b9-8ecd-7c89732660e8
+Cookie: {{cookie}}
 
 
 ###
 # Update Task
-PUT {{baseURL}}/tasks/2cac7ec1-48c4-404c-9372-ab92c18e8761
+PUT {{baseURL}}/tasks/7c6b034d-0566-4d58-bd2c-1922ed036227
 Content-Type: application/json
-Cookie: Authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTVlYWE4M2MtZjlmMi00MWUyLTkxMzItODk2NmIxZmVkNTg0IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMTAyMzgwOCwiZXhwIjoxNjExMDI3NDA4fQ.0vhvrh9PBGFfjblOCf5jg3of3UEAVxSmSj_m99VLcqY; HttpOnly; Max-Age=3600;
+Cookie: {{cookie}}
 
 {
-    "title": "This is newly updated, bahzahh",
-    "userWeight": ".5",
-    "computedWeight": ".5",
-    "isDeferred": false,
+    "taskId": "7c6b034d-0566-4d58-bd2c-1922ed036227",
+    "title": "Update something else",
+    "userWeight": 50,
+    "computedWeight": 60,
+    "isDeferred": true,
     "repeatFloor": 2,
     "repeatCeiling": 2,
-    "lastCompletedDt": "2021-01-01T00:00:00.001Z",
-    "lastDeferredDt": "2021-01-01T00:00:00.001Z"
+    "lastCompletedDt": "2021-01-31T00:00:00.000Z",
+    "lastDeferredDt": "2021-02-03T01:12:40.208Z"
 }
+
+###
+# Defer Task
+PUT {{baseURL}}/tasks/defer/7c6b034d-0566-4d58-bd2c-1922ed036227
+Content-Type: application/json
+Cookie: {{cookie}}
+
+
+###
+# Complete Task
+PUT {{baseURL}}/tasks/complete/7c6b034d-0566-4d58-bd2c-1922ed036227
+Cookie: {{cookie}}
+

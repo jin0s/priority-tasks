@@ -25,20 +25,20 @@ export default class Task extends Model<Task> {
 
   @AllowNull(false)
   @Column({
-    type: DataType.DECIMAL(4, 2),
+    type: DataType.INTEGER,
     validate: {
-      min: 0.01,
-      max: 1.0,
+      min: 1,
+      max: 100,
     },
   })
   userWeight: number;
 
   @AllowNull(false)
   @Column({
-    type: DataType.DECIMAL(4, 2),
+    type: DataType.INTEGER,
     validate: {
-      min: 0.01,
-      max: 1.0,
+      min: 1,
+      max: 100,
     },
   })
   computedWeight: number;
@@ -72,4 +72,8 @@ export default class Task extends Model<Task> {
   @AllowNull(true)
   @Column(DataTypes.DATE)
   lastDeferredDt: Date;
+
+  @AllowNull(true)
+  @Column(DataTypes.DATE)
+  deferredUntilDt: Date;
 }
