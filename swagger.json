@@ -1,0 +1,201 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"title": "Taskman API Documentation",
+		"description": "TypeScript + Sequelize + Express API Server for Taskman Project - CSEBROS",
+		"license": {
+			"name": "ISC"
+		},
+		"version": "0.0.0"
+	},
+	"host": "localhost:5000",
+	"tags": [
+		{
+			"name": "Taskman API",
+			"description": "Users and Tasks"
+		}
+	],
+	"schemes": ["http"],
+	"consumes": ["application/json"],
+	"produces": ["application/json"],
+	"definitions": {
+		"User": {
+			"properties": {
+				"userId": { "type": "string" },
+				"email": { "type": "string" },
+				"password": { "type": "string" }
+			}
+		},
+		"Task": {
+			"type": "object",
+			"properties": {
+				"taskId": { "type": "string" },
+				"userId": { "type": "string" },
+				"title": { "type": "string" },
+				"userWeight": { "type": "integer" },
+				"computedWeight": { "type": "integer" },
+				"isDeferred": { "type": "boolean" },
+				"repeatFloor": { "type": "integer" },
+				"repeatCeiling": { "type": "integer" },
+				"lastCompletedDt": { "type": "string" },
+				"lastDeferredDt": { "type": "string" },
+				"deferredUntilDt": { "type": "string" }
+			}
+		},
+		"Tasks": {
+			"type":"array",
+			"properties": {
+				"task": {
+					"type": "object",
+					"additionalProperties": {
+						"$ref": "#/definitions/Task"
+					}
+				}
+			}
+		}
+		
+	},
+	"paths": {
+		"/auth/signup" : {
+			"post": {
+				"tags": ["Auth"],
+				"summary": "create a new user",
+				"responses": {
+					"201": {
+						"description": "signup",
+						"schema": {
+							"$ref": "#/definitions/User"
+						}
+					}
+				}
+			}
+		},
+		"/tasks" : {
+			"post": {
+				"tags": ["Tasks"],
+				"summary": "create a new task",
+				"responses": {
+					"201": {
+						"description": "created a new task",
+						"schema": {
+							"$ref": "#/definitions/Task"
+						}
+					}
+				}
+			}
+		},
+		"/tasks/{id}": {
+			"parameters": [
+				{
+					"name": "id",
+					"in": "path",
+					"required": true,
+					"description": "uuid of the task that you want info for",
+					"type": "string"
+				}
+			],
+			"get": {
+				"tags": ["Tasks"],
+				"summary": "get a task by id",
+				"responses": {
+					"200": {
+						"description": "task object",
+						"schema": {
+							"$ref": "#/definitions/Task"
+						}
+					}
+				}
+			},
+			"put": {
+				"parameters": [
+					{
+						"$ref": "#/definitions/Task",
+						"required": true
+					}
+				],
+				"tags": ["Tasks"],
+				"summary": "update a task by id",
+				"responses": {
+					"200": {
+						"description": "the same task is returned but with new defered data.",
+						"schema": {
+							"$ref": "#/definitions/Task"
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Tasks"],
+				"summary": "delete a task by id",
+				"responses": {
+					"200": {
+						"description": "task object",
+						"schema": {
+							
+						}
+					}
+				}
+			}
+		},
+		"/tasks/today": {
+			"get": {
+				"tags": ["Tasks"],
+				"summary": "get today's tasks",
+				"responses": {
+					"201": {
+						"description": "signup",
+						"schema": {
+							"$ref": "#/definitions/Tasks"
+						}
+					}
+				}
+			}
+		},
+		"/tasks/defer/{id}": {
+			"parameters": [
+				{
+					"name": "id",
+					"in": "path",
+					"required": true,
+					"description": "uuid of the task that you want to defer",
+					"type": "string"
+				}
+			],
+			"put": {
+				"tags": ["Tasks"],
+				"summary": "defer a task by id",
+				"responses": {
+					"200": {
+						"description": "the same task is returned but with new defered data.",
+						"schema": {
+							"$ref": "#/definitions/Task"
+						}
+					}
+				}
+			}
+		},
+		"/tasks/complete/{id}": {
+			"parameters": [
+				{
+					"name": "id",
+					"in": "path",
+					"required": true,
+					"description": "uuid of the task that you want to mark as complete",
+					"type": "string"
+				}
+			],
+			"put": {
+				"tags": ["Tasks"],
+				"summary": "complete a task by id",
+				"responses": {
+					"200": {
+						"description": "the same task is returned but with new completed data.",
+						"schema": {
+							"$ref": "#/definitions/Task"
+						}
+					}
+				}
+			}
+		}
+	}
+}
