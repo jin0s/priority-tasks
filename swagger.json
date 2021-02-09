@@ -53,23 +53,105 @@
 				}
 			}
 		}
-		
 	},
+
 	"paths": {
 		"/auth/signup" : {
+			"parameters": [
+				{
+					"name": "email",
+					"in":"formData",
+					"required": true,
+					"description": "email address of new user",
+					"type": "string"
+				},
+				{
+					"name": "password",
+					"in":"formData",
+					"required": true,
+					"description": "password for the new account",
+					"type": "string"
+				}
+			],
 			"post": {
 				"tags": ["Auth"],
 				"summary": "create a new user",
 				"responses": {
 					"201": {
-						"description": "signup",
+						"description": "signup success",
 						"schema": {
 							"$ref": "#/definitions/User"
 						}
+					},
+					"400": {
+						"description": "userData not provided for signup"
+					},
+					"409": {
+						"description": "account already exist for this email"
 					}
 				}
 			}
 		},
+
+		"/auth/login" : {
+			"parameters": [
+				{
+					"name": "email",
+					"in":"formData",
+					"required": true,
+					"description": "email address of user",
+					"type": "string"
+				},
+				{
+					"name": "password",
+					"in":"formData",
+					"required": true,
+					"description": "password of user",
+					"type": "string"
+				}
+			],
+			"post": {
+				"tags": ["Auth"],
+				"summary": "signin a user",
+				"responses": {
+					"200": {
+						"description": "signin success",
+						"schema": {
+							"$ref": "#/definitions/User"
+						}
+					},
+					"400": {
+						"description": "userData not provided for signin"
+					},
+					"409": {
+						"description": "email not found or password failed"
+					}
+				}
+			}
+		},
+
+		"/auth/logout" : {
+			"post": {
+				"security": [],
+				"tags": ["Auth"],
+				"summary": "logout a user",
+				"responses": {
+					"200": {
+						"description": "logout success",
+						"schema": {
+							"$ref": "#/definitions/User"
+						}
+					},
+					"400": {
+						"description": "userData not provided for logout"
+					},
+					"409": {
+						"description": "email not found or password failed"
+					}
+				}
+			}
+		},
+
 		"/tasks" : {
 			"post": {
 				"tags": ["Tasks"],
@@ -84,6 +166,7 @@
 				}
 			}
 		},
+
 		"/tasks/{id}": {
 			"parameters": [
 				{
@@ -107,12 +190,6 @@
 				}
 			},
 			"put": {
-				"parameters": [
-					{
-						"$ref": "#/definitions/Task",
-						"required": true
-					}
-				],
 				"tags": ["Tasks"],
 				"summary": "update a task by id",
 				"responses": {
@@ -137,6 +214,7 @@
 				}
 			}
 		},
+
 		"/tasks/today": {
 			"get": {
 				"tags": ["Tasks"],
