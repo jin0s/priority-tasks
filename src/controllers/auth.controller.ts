@@ -4,7 +4,7 @@ import AuthService from '../services/auth.service';
 import { User } from '../interfaces/users.interface';
 import { RequestWithUser } from '../interfaces/auth.interface';
 
-class AuthController {
+export default class AuthController {
   public authService = new AuthService();
 
   public signUp = async (req: Request, res: Response, next: NextFunction) => {
@@ -54,5 +54,3 @@ class AuthController {
     }
   };
 }
-
-export default AuthController;

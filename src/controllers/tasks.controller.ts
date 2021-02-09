@@ -59,6 +59,7 @@ class TasksController {
     const jwtToken = req.cookies.Authorization;
     const tokenData: TokenPayloadData = decodeToken(jwtToken);
     const userUUID = tokenData.uuid;
+    
     try {
       const updatedTaskData: Task = await this.taskService.updateTask(userUUID, taskId, taskData);
       res.status(200).json({ data: updatedTaskData, message: 'updated' });

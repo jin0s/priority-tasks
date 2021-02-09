@@ -1,126 +1,209 @@
+swagger: '2.0'
+info:
+  title: Taskman API Documentation
+  description: TypeScript + Sequelize + Express API Server for Taskman Project - CSEBROS
+  license:
+    name: ISC
+  version: 0.0.0
+host: 'localhost:5000'
 tags:
-- name: users
-  description: users API
-
-paths:
-# [GET] users
-  /users:
-    get:
-      tags:
-      - users
-      summary: Find All Users
-      responses:
-        200:
-          description: 'OK'
-        500:
-          description: 'Server Error'
-
-# [POST] users
-    post:
-      tags:
-      - users
-      summary: Add User
-      parameters:
-      - name: body
-        in: body
-        description: user Data
-        required: true
-        schema:
-          $ref: '#/definitions/users'
-      responses:
-        201:
-          description: 'Created'
-        400:
-          description: 'Bad Request'
-        409:
-          description: 'Conflict'
-        500:
-          description: 'Server Error'
-
-# [GET] users/id
-  /users/{id}:
-    get:
-      tags:
-      - users
-      summary: Find User By Id
-      parameters:
-      - name: id
-        in: path
-        description: User Id
-        required: true
-        type: integer
-      responses:
-        200:
-          description: 'OK'
-        409:
-          description: 'Conflict'
-        500:
-          description: 'Server Error'
-
-# [PUT] users/id
-    put:
-      tags:
-      - users
-      summary: Update User By Id
-      parameters:
-      - name: id
-        in: path
-        description: user Id
-        required: true
-        type: integer
-      - name: body
-        in: body
-        description: user Data
-        required: true
-        schema:
-          $ref: '#/definitions/users'
-      responses:
-        200:
-          description: 'OK'
-        400:
-          description: 'Bad Request'
-        409:
-          description: 'Conflict'
-        500:
-          description: 'Server Error'
-
-# [DELETE] users/id
-    delete:
-      tags:
-      - users
-      summary: Delete User By Id
-      parameters:
-      - name: id
-        in: path
-        description: user Id
-        required: true
-        type: integer
-      responses:
-        200:
-          description: 'OK'
-        409:
-          description: 'Conflict'
-        500:
-          description: 'Server Error'
-
-# definitions
+  - name: Taskman API
+    description: Users and Tasks
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
 definitions:
-  users:
-    type: object
-    required:
-        - email
-        - password
+  User:
     properties:
-      id:
-        type: integer
-        description: user Id
+      userId:
+        type: string
       email:
         type: string
-        description: user Email
       password:
         type: string
-        description: user Password
-
-schemes:
- - https
- - http
+  Task:
+    type: object
+    properties:
+      taskId:
+        type: string
+      userId:
+        type: string
+      title:
+        type: string
+      userWeight:
+        type: integer
+      computedWeight:
+        type: integer
+      isDeferred:
+        type: boolean
+      repeatFloor:
+        type: integer
+      repeatCeiling:
+        type: integer
+      lastCompletedDt:
+        type: string
+      lastDeferredDt:
+        type: string
+      deferredUntilDt:
+        type: string
+  Tasks:
+    type: array
+    properties:
+      task:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/Task'
+paths:
+  /auth/signup:
+    parameters:
+      - name: email
+        in: formData
+        required: true
+        description: email address of new user
+        type: string
+      - name: password
+        in: formData
+        required: true
+        description: password for the new account
+        type: string
+    post:
+      tags:
+        - Auth
+      summary: create a new user
+      responses:
+        '201':
+          description: signup success
+          schema:
+            $ref: '#/definitions/User'
+        '400':
+          description: userData not provided for signup
+        '409':
+          description: account already exist for this email
+  /auth/login:
+    parameters:
+      - name: email
+        in: formData
+        required: true
+        description: email address of user
+        type: string
+      - name: password
+        in: formData
+        required: true
+        description: password of user
+        type: string
+    post:
+      tags:
+        - Auth
+      summary: signin a user
+      responses:
+        '200':
+          description: signin success
+          schema:
+            $ref: '#/definitions/User'
+        '400':
+          description: userData not provided for signin
+        '409':
+          description: email not found or password failed
+  /auth/logout:
+    post:
+      security: []
+      tags:
+        - Auth
+      summary: logout a user
+      responses:
+        '200':
+          description: logout success
+          schema:
+            $ref: '#/definitions/User'
+        '400':
+          description: userData not provided for logout
+        '409':
+          description: email not found or password failed
+  /tasks:
+    post:
+      tags:
+        - Tasks
+      summary: create a new task
+      responses:
+        '201':
+          description: created a new task
+          schema:
+            $ref: '#/definitions/Task'
+  '/tasks/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: uuid of the task that you want info for
+        type: string
+    get:
+      tags:
+        - Tasks
+      summary: get a task by id
+      responses:
+        '200':
+          description: task object
+          schema:
+            $ref: '#/definitions/Task'
+    put:
+      tags:
+        - Tasks
+      summary: update a task by id
+      responses:
+        '200':
+          description: the same task is returned but with new defered data.
+          schema:
+            $ref: '#/definitions/Task'
+    delete:
+      tags:
+        - Tasks
+      summary: delete a task by id
+      responses:
+        '200':
+          description: task object
+          schema: {}
+  /tasks/today:
+    get:
+      tags:
+        - Tasks
+      summary: get today's tasks
+      responses:
+        '201':
+          description: signup
+          schema:
+            $ref: '#/definitions/Tasks'
+  '/tasks/defer/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: uuid of the task that you want to defer
+        type: string
+    put:
+      tags:
+        - Tasks
+      summary: defer a task by id
+      responses:
+        '200':
+          description: the same task is returned but with new defered data.
+          schema:
+            $ref: '#/definitions/Task'
+  '/tasks/complete/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: uuid of the task that you want to mark as complete
+        type: string
+    put:
+      tags:
+        - Tasks
+      summary: complete a task by id
+      responses:
+        '200':
+          description: the same task is returned but with new completed data.
+          schema:
+            $ref: '#/definitions/Task'
