@@ -8,7 +8,7 @@
     "node": "14.x"
   },
   "scripts": {
-    "start": "npm run build && cross-env NODE_ENV=production node build/server.js",
+    "start": "npm run build && cross-env NODE_ENV=production node build/src/server.js",
     "dev": "cross-env NODE_ENV=development nodemon",
     "build": "tsc",
     "test": "jest --forceExit --detectOpenHandles -i",
