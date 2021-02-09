@@ -8,6 +8,8 @@ import logger from 'morgan';
 import Routes from './interfaces/routes.interface';
 import errorMiddleware from './middlewares/error.middleware';
 import sequelize from './models/index.model';
+import * as swaggerDocument from '../swagger.json';
+import swaggerUi from 'swagger-ui-express';
 
 class App {
   public app: express.Application;
@@ -23,6 +25,8 @@ class App {
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
     this.initializeErrorHandling();
+
+    this.app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   }
 
   public listen() {

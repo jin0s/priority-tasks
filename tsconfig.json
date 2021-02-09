@@ -14,7 +14,8 @@
     "outDir": "./build",
     "allowJs": true,
     "noEmit": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
   },
   "include": ["./src/**/*", ".env"],
   "exclude": ["node_modules", "tests"]
