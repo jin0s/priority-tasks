@@ -5,7 +5,7 @@
 @baseURL = http://localhost:5000
 
 # Not sure why the VSCode REST Client wont save the cookie automatically
-@cookie = Authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTBiMzg1NTItZmEwNy00ZTljLWI0YWUtY2IwMWY0Yzk3MTQ1IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMjQxNDU2NSwiZXhwIjoxNjEyNDE4MTY1fQ.5mBcOFrSEu_U7wI5oaSOWjSEjUrE9uAI1Cx4LAmUvoA; HttpOnly; Max-Age=3600;,Refresh=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTBiMzg1NTItZmEwNy00ZTljLWI0YWUtY2IwMWY0Yzk3MTQ1IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxMjQxNDU2NiwiZXhwIjoxNjEzMDE5MzY2fQ.VsY0ct1HnOMiGRVkHfaA5K-I3IS29b7SHlcmsC6hh-U; HttpOnly; Max-Age=604800;
+@cookie = Authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTBiMzg1NTItZmEwNy00ZTljLWI0YWUtY2IwMWY0Yzk3MTQ1IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxNTc0NDM5MiwiZXhwIjoxNjE1NzQ3OTkyfQ.GE7u3BRueG-4Sp9vcOOMHlEje57wAQBfQIGGHaqxfno; HttpOnly; Max-Age=3600; SameSite=False; Path=/,Refresh=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTBiMzg1NTItZmEwNy00ZTljLWI0YWUtY2IwMWY0Yzk3MTQ1IiwiZW1haWwiOiJleGFtcGxlQGdtYWlsLmNvbSIsImlhdCI6MTYxNTc0NDM5MiwiZXhwIjoxNjE2MzQ5MTkyfQ.M9SoXOji2T2rFJ6fPAMEmF_ze34BKKhSMeoBHouHjEo; HttpOnly; Max-Age=604800; SameSite=False;
 
 ###
 # Login
@@ -38,16 +38,28 @@ POST {{baseURL}}/tasks
 Content-Type: application/json
 Cookie: {{cookie}}
 
-{
-    "title": "Update something else",
-    "userWeight": 50,
-    "computedWeight": 60,
-    "isDeferred": true,
-    "repeatFloor": 2,
-    "repeatCeiling": 2,
-    "lastCompletedDt": "2021-01-31T00:00:00.000Z",
-    "lastDeferredDt": "2021-02-03T01:12:40.208Z"
+{ 
+    "task": 
+    {
+        "title": "T1",
+        "userWeight": 50,
+        "isDeferred": true,
+        "repeatFloor": 2,
+        "repeatCeiling": 2,
+        "deferredUntilDt": "2021-04-03T01:12:40.208Z"
+    }
 }
+
+# {
+#     "title": "Update something else",
+#     "userWeight": 50,
+#     "computedWeight": 60,
+#     "isDeferred": true,
+#     "repeatFloor": 2,
+#     "repeatCeiling": 2,
+#     "lastCompletedDt": "2021-01-31T00:00:00.000Z",
+#     "lastDeferredDt": "2021-02-03T01:12:40.208Z"
+# }
 
 
 ###

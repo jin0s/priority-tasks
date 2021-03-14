@@ -3,6 +3,7 @@ import { Task } from '../interfaces/tasks.interface';
 import { decodeToken } from '../services/auth.service';
 import taskService from '../services/tasks.service';
 import { TokenPayloadData } from '../interfaces/auth.interface';
+import { NewTask } from '../interfaces/tasks.interface';
 
 class TasksController {
   public taskService = new taskService();
@@ -27,9 +28,9 @@ class TasksController {
 
   public getTaskById = async (req: Request, res: Response, next: NextFunction) => {
     const taskId = req.params.id;
-    const jwtToken = req.cookies.Authorization;
-    const tokenData: TokenPayloadData = decodeToken(jwtToken);
-    const userUUID = tokenData.uuid;
+    // const jwtToken = req.cookies.Authorization;
+    // const tokenData: TokenPayloadData = decodeToken(jwtToken);
+    // const userUUID = tokenData.uuid;
 
     try {
       const findOneTaskData: Task = await this.taskService.findTaskById(taskId);
@@ -40,10 +41,23 @@ class TasksController {
   };
 
   public createTask = async (req: Request, res: Response, next: NextFunction) => {
-    const taskData: Task = req.body;
+    const createTaskData = req.body.task as NewTask;
     const jwtToken = req.cookies.Authorization;
     const tokenData: TokenPayloadData = decodeToken(jwtToken);
     const userId = tokenData.uuid;
+
+    //set the remaining task properties here for now
+    const taskData: Task = {
+      title: createTaskData.title,
+      userWeight: createTaskData.userWeight,
+      repeatFloor: createTaskData.repeatFloor,
+      repeatCeiling: createTaskData.repeatCeiling,
+      deferredUntilDt: createTaskData.deferredUntilDt,
+      isDeferred: createTaskData.deferredUntilDt === null ? false : true,
+      lastCompletedDt: new Date(2000, 0, 1),
+      lastDeferredDt: new Date(2000, 0, 1),
+      computedWeight: createTaskData.userWeight,
+    };
 
     try {
       const createTaskData: Task = await this.taskService.createTask(userId, taskData);
@@ -59,7 +73,7 @@ class TasksController {
     const jwtToken = req.cookies.Authorization;
     const tokenData: TokenPayloadData = decodeToken(jwtToken);
     const userUUID = tokenData.uuid;
-    
+
     try {
       const updatedTaskData: Task = await this.taskService.updateTask(userUUID, taskId, taskData);
       res.status(200).json({ data: updatedTaskData, message: 'updated' });
@@ -95,7 +109,7 @@ class TasksController {
       next(error);
     }
   };
-  
+
   public completeTask = async (req: Request, res: Response, next: NextFunction) => {
     const taskId = req.params.id;
     const jwtToken = req.cookies.Authorization;
