@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, IsDateString, IsDecimal, IsNumber, IsString, IsUUID, MaxLength, IsInt, Max, Min, IsOptional } from 'class-validator';
+import { IsBoolean, IsDateString, IsNumber, IsString, MaxLength, IsInt, Max, Min, IsOptional } from 'class-validator';
 import { Task } from '../interfaces/tasks.interface';
 
 export class TaskDto implements Task {
