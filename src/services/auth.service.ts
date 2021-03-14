@@ -58,6 +58,9 @@ class AuthService {
   }
 
   public createCookie(tokenData: TokenData): string {
+    if (process.env.NODE_ENV === 'development') {
+      return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn}; SameSite=False; Path=/`;
+    }
     return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`;
   }
 
@@ -70,6 +73,9 @@ class AuthService {
   }
 
   public createRefreshCookie(tokenData: TokenData): string {
+    if (process.env.NODE_ENV === 'development') {
+      return `Refresh=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn}; SameSite=False;`;
+    }
     return `Refresh=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`;
   }
 
