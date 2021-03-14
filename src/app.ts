@@ -42,7 +42,7 @@ class App {
   private initializeMiddlewares() {
     if (this.envIsDevelopment) {
       this.app.use(logger('dev'));
-      this.app.use(cors({ origin: true, credentials: true }));
+      this.app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
     } else {
       this.app.use(hpp());
       this.app.use(helmet());
