@@ -20,7 +20,7 @@ export default class Task extends Model<Task> {
   userId: string;
 
   @AllowNull(false)
-  @Column(DataType.STRING(40))
+  @Column(DataType.STRING(50))
   title: string;
 
   @AllowNull(false)
