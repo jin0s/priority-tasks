@@ -41,7 +41,7 @@ class TasksController {
   };
 
   public createTask = async (req: Request, res: Response, next: NextFunction) => {
-    const createTaskData = req.body.task as NewTask;
+    const createTaskData: NewTask = req.body.task;
     const jwtToken = req.cookies.Authorization;
     const tokenData: TokenPayloadData = decodeToken(jwtToken);
     const userId = tokenData.uuid;

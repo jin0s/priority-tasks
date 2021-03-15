@@ -1,10 +1,9 @@
 import { Router } from 'express';
 import TasksController from '../controllers/tasks.controller';
-import { DeferredUntilDto, TaskDto } from '../dtos/tasks.dto';
+import { CreateTaskDto, DeferredUntilDto, TaskDto } from '../dtos/tasks.dto';
 import Route from '../interfaces/routes.interface';
 import validationMiddleware from '../middlewares/validation.middleware';
 import authMiddleware from '../middlewares/auth.middleware';
-import { NewTaskDto } from '../dtos/tasks.dto';
 
 class TasksRoute implements Route {
   public path = '/tasks';
@@ -20,7 +19,7 @@ class TasksRoute implements Route {
     this.router.get(`${this.path}/:id`, authMiddleware, this.tasksController.getTaskById);
     this.router.put(`${this.path}/:id`, authMiddleware, validationMiddleware(TaskDto), this.tasksController.updateTask);
     this.router.delete(`${this.path}/:id`, authMiddleware, this.tasksController.deleteTaskById);
-    this.router.post(`${this.path}`, authMiddleware, validationMiddleware(NewTaskDto), this.tasksController.createTask);
+    this.router.post(`${this.path}`, authMiddleware, validationMiddleware(CreateTaskDto), this.tasksController.createTask);
     this.router.put(`${this.path}/defer/:id`, authMiddleware, validationMiddleware(DeferredUntilDto), this.tasksController.deferTasks);
     this.router.put(`${this.path}/complete/:id`, authMiddleware, this.tasksController.completeTask);
   }

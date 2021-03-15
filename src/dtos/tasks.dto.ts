@@ -1,4 +1,4 @@
-import { IsBoolean, IsDateString, IsNumber, IsString, MaxLength, IsInt, Max, Min, IsOptional } from 'class-validator';
+import { IsBoolean, IsDateString, IsNumber, IsString, MaxLength, IsInt, Max, Min, IsOptional, ValidateNested } from 'class-validator';
 import { NewTask, Task } from '../interfaces/tasks.interface';
 
 export class TaskDto implements Task {
@@ -71,4 +71,9 @@ export class NewTaskDto implements NewTask {
   public repeatCeiling: number;
 
   deferredUntilDt?: Date;
+}
+
+export class CreateTaskDto {
+  @ValidateNested()
+  task: NewTaskDto;
 }
