@@ -14,6 +14,9 @@ npm run dev
 # Server runs on http://localhost:5000
 ```
 
+## Endpoint Documentation with Swagger
+https://priority-tasks.herokuapp.com/swagger/#/Auth/post_auth_signup
+
 ## Database Connection
 If the app is unable to connect to Heroku Postgres Database, you will need to update the credentials in the `.env` file to reflect Heroku's. The credentials do rotate and will need to be change routinely.
 
